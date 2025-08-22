@@ -1,7 +1,10 @@
 ## Requirements
-- [Fabric Loader](https://fabricmc.net/)  
+- [Fabric Loader](https://fabricmc.net/)
 - [Fabric API](https://modrinth.com/mod/fabric-api) (required)  
-- [Mod Menu](https://modrinth.com/mod/modmenu) (optional, adds a configuration screen)
+- [Mod Menu](https://modrinth.com/mod/modmenu) (optional)
+- (Optional) Install the mod on the server/LAN host to enable extra features. 
+
+---
 
 # Simple Tracking Compass
 
@@ -22,13 +25,6 @@ If the mod is **installed on the server** (or if you are playing on a **LAN worl
 - 🔭 Ability to track players **even if they are outside of your render distance**.  
 
 ⚠️ These additional features are **not possible on unmodded servers** because Minecraft itself does not allow sending player position data unless the mod is present on the server.
-
----
-
-## 📦 Installation
-1. Install [Fabric Loader](https://fabricmc.net/).  
-2. Download and place the latest release `.jar` into your `mods/` folder.  
-3. (Optional) Install the mod on the server/LAN host to enable extra features.  
 
 ---
 
