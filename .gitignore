@@ -1,4 +1,19 @@
-# Project exclude paths
-/.gradle/
-/build/
-/build/classes/java/main/
+# Gradle
+.gradle/
+build/
+out/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Run configs / generated files
+run/
