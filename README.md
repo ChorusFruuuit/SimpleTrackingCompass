@@ -6,7 +6,7 @@ It lets you track other players, which can be especially useful for **manhunts**
 ---
 
 ## ✨ Features
-- 📍 Always shows a compass in the HUD.  
+- 📍 Shows a compass in the HUD. (Can be hidden)
 - 🧭 Lets you track other players.  
 - 👥 Great for multiplayer survival, challenges, and manhunts.  
 
