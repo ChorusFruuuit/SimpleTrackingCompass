@@ -1,9 +1,0 @@
-{
-  "minecraft:recipes/decorations/crafting_table": {
-    "criteria": {
-      "unlock_right_away": "2025-08-18 10:26:43 +0300"
-    },
-    "done": true
-  },
-  "DataVersion": 4440
-}
