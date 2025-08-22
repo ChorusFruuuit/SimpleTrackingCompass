@@ -3,7 +3,7 @@
   "id": "simpletrackingcompass",
   "version": "${version}",
   "name": "Simple Tracking Compass",
-  "description": "Adds a compass to the top left corner of your screen. You can track other players with it. Can be useful for manhunts.",
+  "description": "Simple Tracking Compass is a Fabric mod that adds a compass HUD to the top-left corner of your screen.\nIt lets you track other players, which can be especially useful for manhunts or other competitive challenges.",
   "authors": [
     "Chorus_Fruuu1t"
   ],
