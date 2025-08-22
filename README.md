@@ -1,3 +1,8 @@
+## Requirements
+- [Fabric Loader](https://fabricmc.net/)  
+- [Fabric API](https://modrinth.com/mod/fabric-api) (required)  
+- [Mod Menu](https://modrinth.com/mod/modmenu) (optional, adds a configuration screen)
+
 # Simple Tracking Compass
 
 **Simple Tracking Compass** is a Fabric mod that adds a compass HUD to the top-left corner of your screen.  
