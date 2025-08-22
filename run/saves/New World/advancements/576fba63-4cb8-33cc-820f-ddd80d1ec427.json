@@ -1,0 +1,50 @@
+{
+  "minecraft:nether/explore_nether": {
+    "criteria": {
+      "minecraft:crimson_forest": "2025-08-12 17:34:22 +0300"
+    },
+    "done": false
+  },
+  "minecraft:nether/root": {
+    "criteria": {
+      "entered_nether": "2025-08-12 17:34:22 +0300"
+    },
+    "done": true
+  },
+  "minecraft:story/enter_the_nether": {
+    "criteria": {
+      "entered_nether": "2025-08-12 17:34:22 +0300"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2025-08-12 17:32:24 +0300"
+    },
+    "done": true
+  },
+  "minecraft:end/root": {
+    "criteria": {
+      "entered_end": "2025-08-12 17:35:08 +0300"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:desert": "2025-08-12 17:32:25 +0300",
+      "minecraft:forest": "2025-08-12 17:33:00 +0300",
+      "minecraft:river": "2025-08-12 17:39:27 +0300",
+      "minecraft:stony_shore": "2025-08-12 17:39:30 +0300",
+      "minecraft:savanna": "2025-08-12 17:39:28 +0300",
+      "minecraft:plains": "2025-08-12 17:39:24 +0300"
+    },
+    "done": false
+  },
+  "minecraft:story/enter_the_end": {
+    "criteria": {
+      "entered_end": "2025-08-12 17:35:08 +0300"
+    },
+    "done": true
+  },
+  "DataVersion": 4440
+}

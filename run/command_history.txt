@@ -1,0 +1,50 @@
+/gamemode survival Player793
+/gamemode creative Player793
+/gamemode survival Player793
+/gamemode creative Player793
+/gamemode survival Player793
+/gamemode creative Player793
+/kill @e[type=!minecraft:player]
+/gamerule keepInventory true
+/kill
+/effect give @a minecraft:night_vision infinite 255 true
+/tp @s -1664 130 336
+/effect give Player534 minecraft:strength infinite 2 true
+/tp @s -1664 130 336
+/effect give Player534 minecraft:strength infinite 2 true
+/effect give @a minecraft:night_vision infinite 255 true
+/effect give Player534 minecraft:strength infinite 2 true
+/tp @s -1664 130 336
+/tp 0 ~ 0
+/tp @s -1664 130 336
+/effect give Player534 minecraft:strength infinite 2 true
+/effect give @a minecraft:night_vision infinite 255 true
+/tp @s -1664 130 336
+/gamemode survival
+/gamemode creative
+/kill
+/locate structure minecraft:stronghold
+/time set day
+/setblock ~ ~-1 ~ minecraft:end_portal
+/effect give @a minecraft:night_vision infinite 255 true
+/list uuids
+/kill @e[type=!minecraft:player]
+/fill -22 32 -8 -22 32 -8 minecraft:air replace minecraft:netherrack
+/fill -22 32 -8 -16 31 -4 minecraft:air replace minecraft:netherrack
+/fill -22 32 -8 -16 40 -6 minecraft:air replace minecraft:netherrack
+/fill -22 33 -8 -16 40 -6 minecraft:air replace minecraft:netherrack
+/fill -22 33 -8 -16 45 -6 minecraft:air replace minecraft:netherrack
+/give Player105 minecraft:end_portal_frame
+/kill @e[type=!minecraft:player]
+/kill
+/effect give @a minecraft:night_vision infinite 255 true
+/kill
+/effect give @a minecraft:night_vision infinite 255 true
+/enchant Player631 minecraft:density 5
+/enchant Player631 minecraft:wind_burst 3
+/kill @e[type=!minecraft:player]
+/effect give @e[type=!minecraft:player] minecraft:resistance infinite 4 true
+/kill @e[type=!minecraft:player]
+/effect give @e[type=!minecraft:player] minecraft:resistance infinite 4 true
+/effect give @a minecraft:resistance infinite 255 true
+/

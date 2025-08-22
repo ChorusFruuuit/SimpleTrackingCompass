@@ -1,0 +1,78 @@
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<ServerNetworking> minecraft:overworld
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player234'/344, l='ClientLevel', x=-1657.70, y=93.00, z=320.44, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+
+
+
+<updateTrackedPlayer> false, OtherClientPlayerEntity['Player473'/310, l='ClientLevel', x=-1657.69, y=93.00, z=320.70, removed=DISCARDED]
+<setTargetPlayer> Remote
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<ServerNetworking> minecraft:overworld
+<updateTrackedPlayer> true, null
+<setTargetPlayer> Nearby

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "simpletrackingcompass",
+  "version": "${version}",
+  "name": "Simple Tracking Compass",
+  "description": "Adds a compass to the top left corner of your screen. You can track other players with it. Can be useful for manhunts.",
+  "authors": [
+    "Chorus_Fruuu1t"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/simpletrackingcompass/textures/icon.png",
+  "environment": "*",
+  "custom": {
+    "modmenu:api": true
+  },
+  "entrypoints": {
+    "client": [
+      "me.chorus.simpletrackingcompass.client.SimpleTrackingCompassClient"
+    ],
+    "main": [
+      "me.chorus.simpletrackingcompass.SimpleTrackingCompass"
+    ],
+    "modmenu": [
+      "me.chorus.simpletrackingcompass.compat.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "simpletrackingcompass.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
