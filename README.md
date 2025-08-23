@@ -28,5 +28,11 @@ If the mod is **installed on the server** (or if you are playing on a **LAN worl
 
 ---
 
+## 🔗 Socials
+
+- [Discord](https://discord.com/users/1003646124273455158)
+
+---
+
 ## 📜 License
 This project is licensed under the **MIT License**.
