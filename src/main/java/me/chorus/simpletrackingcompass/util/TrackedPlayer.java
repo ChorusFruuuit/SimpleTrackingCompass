@@ -71,24 +71,5 @@ public class TrackedPlayer {
         this.z = pos.z;
 
         if (!wasPositionChanged) wasPositionChanged = true;
-
-//        this.dimension = dim;
-//
-//        World world = MinecraftClient.getInstance().world;
-//        if (world != null && world.getRegistryKey().getValue().equals(dimension)) {
-//            this.x = pos.x;
-//            this.z = pos.z;
-//
-//            if (!wasPositionChanged) wasPositionChanged = true;
-//        }
-//        else {
-//            MinecraftClient.getInstance().player.sendMessage(Text.literal(String.format("<setRemoteData> %s", world)), false);
-//            if (world != null) {
-//                MinecraftClient.getInstance().player.sendMessage(Text.literal(String.format("<setRemoteData> %s, %s", world.getRegistryKey().getValue(), dimension)), false);
-//            }
-//            else {
-//                MinecraftClient.getInstance().player.sendMessage(Text.literal("<setRemoteData> null"), false);
-//            }
-//        }
     }
 }
