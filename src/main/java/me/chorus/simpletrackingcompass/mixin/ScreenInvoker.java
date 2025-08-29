@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Screen.class)
 public interface ScreenInvoker {
+    @SuppressWarnings("UnusedReturnValue") // Making return value void throws an error
     @Invoker("addDrawableChild")
     <T extends Element & Drawable & Selectable> T invokeAddDrawableChild(T widget);
 }
