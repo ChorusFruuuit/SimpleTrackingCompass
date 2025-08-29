@@ -4,11 +4,12 @@ import me.chorus.simpletrackingcompass.util.ModUtils;
 import me.chorus.simpletrackingcompass.util.PlayerUtils;
 import me.chorus.simpletrackingcompass.util.TrackedPlayer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
@@ -32,7 +33,7 @@ public class CompassHUD {
 
     // Compass related variables
 
-    private static final Identifier COMPASS_ID = Identifier.of("compass_hud");
+    private static final Identifier COMPASS_LAYER = Identifier.of("compass_hud_layer");
 
     private static int compassTexture = 404;
 
@@ -53,11 +54,8 @@ public class CompassHUD {
     public static boolean IsServerModded = false;
 
     public static void register() {
-        HudElementRegistry.addLast(
-                COMPASS_ID,
-                // This method is called every tick to render the compass HUD
-                (context, counter) -> {
-
+        HudLayerRegistrationCallback.EVENT.register(layeredDrawer ->
+                layeredDrawer.attachLayerBefore(IdentifiedLayer.DEBUG, COMPASS_LAYER, ((context, counter) -> {
                     if (isHidden()) return;
 
                     if (client == null || world == null || player == null) updateClientReferences();
@@ -113,7 +111,7 @@ public class CompassHUD {
                     int compassHeight = size[1];
 
                     context.drawTexture(
-                            RenderPipelines.GUI_TEXTURED,
+                            RenderLayer::getGuiTextured,
                             COMPASS_ICON,
                             compassX, compassY,
                             compassU, compassV,
@@ -141,7 +139,7 @@ public class CompassHUD {
                                 x, y, 0xFF00FF00,
                                 false);
                     }
-                }
+                }))
         );
 
         ClientTickEvents.END_CLIENT_TICK.register(
