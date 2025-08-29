@@ -4,8 +4,7 @@ import me.chorus.simpletrackingcompass.util.ModUtils;
 import me.chorus.simpletrackingcompass.util.PlayerUtils;
 import me.chorus.simpletrackingcompass.util.TrackedPlayer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.PlayerListEntry;
@@ -23,6 +22,7 @@ public class CompassHUD {
 
     // Client references
 
+
     private static MinecraftClient client = MinecraftClient.getInstance();
     private static ClientWorld world = client.world;
     private static PlayerEntity player = client.player;
@@ -32,8 +32,6 @@ public class CompassHUD {
     private static TrackedPlayer target = null; // by default
 
     // Compass related variables
-
-    private static final Identifier COMPASS_LAYER = Identifier.of("compass_hud_layer");
 
     private static int compassTexture = 404;
 
@@ -54,8 +52,8 @@ public class CompassHUD {
     public static boolean IsServerModded = false;
 
     public static void register() {
-        HudLayerRegistrationCallback.EVENT.register(layeredDrawer ->
-                layeredDrawer.attachLayerBefore(IdentifiedLayer.DEBUG, COMPASS_LAYER, ((context, counter) -> {
+        HudRenderCallback.EVENT.register(
+                (context, counter) -> {
                     if (isHidden()) return;
 
                     if (client == null || world == null || player == null) updateClientReferences();
@@ -139,7 +137,7 @@ public class CompassHUD {
                                 x, y, 0xFF00FF00,
                                 false);
                     }
-                }))
+                }
         );
 
         ClientTickEvents.END_CLIENT_TICK.register(
