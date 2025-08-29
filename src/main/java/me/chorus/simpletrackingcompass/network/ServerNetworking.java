@@ -2,9 +2,7 @@ package me.chorus.simpletrackingcompass.network;
 
 import me.chorus.simpletrackingcompass.network.packet.*;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
@@ -19,7 +17,6 @@ public class ServerNetworking {
             if (target != null) {
                 Vec3d pos = target.getPos();
                 Identifier dimension = target.getWorld().getRegistryKey().getValue();
-//                MinecraftClient.getInstance().player.sendMessage(Text.literal("<ServerNetworking> " + dimension), false);
 
                 var response = new PlayerPositionResponsePayload(pos, dimension);
                 ServerPlayNetworking.send(requester, response);

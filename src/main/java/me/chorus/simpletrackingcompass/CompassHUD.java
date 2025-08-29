@@ -29,7 +29,6 @@ public class CompassHUD {
     // Target player being tracked
 
     private static TrackedPlayer target = null; // by default
-//    private static Identifier lastRemoteDimension = null;
 
     // Compass related variables
 
@@ -74,9 +73,6 @@ public class CompassHUD {
 
                         int playerX = (int) player.getX();
                         int playerZ = (int) player.getZ();
-
-//                        int targetX = (int) getSafeX(target);
-//                        int targetZ = (int) getSafeZ(target);
 
                         int targetX = (int) target.getX();
                         int targetZ = (int) target.getZ();
@@ -164,23 +160,17 @@ public class CompassHUD {
 
         if (entry != null) {
                 if (playerEntity != null) {
-//                    player.sendMessage(Text.literal("<setTargetPlayer> Nearby"), false);
-//                    lastRemoteDimension = null;
                     target = new TrackedPlayer(playerEntity);
                 }
                 else if (IsServerModded) {
-//                    player.sendMessage(Text.literal("<setTargetPlayer> Remote"), false);
-//                    lastRemoteDimension = null;
                     target = new TrackedPlayer(uuid, name);
                 }
                 else {
-//                    player.sendMessage(Text.literal("<setTargetPlayer> Distance Error!"), false);
                     if (runtimeTriggered) resetTarget();
                     PlayerUtils.playerOutOfRenderDistanceWarn(name);
                 }
         }
         else {
-//            player.sendMessage(Text.literal("<setTargetPlayer> Player Error!"), false);
             if (runtimeTriggered) resetTarget();
             PlayerUtils.playerNotFoundError(name);
         }
@@ -203,14 +193,6 @@ public class CompassHUD {
     }
 
     // Private helper methods
-
-    private static double getSafeX(TrackedPlayer player) {
-        return player.hasPositionBeenEverChanged() ? player.getX() : 0;
-    }
-
-    private static double getSafeZ(TrackedPlayer player) {
-        return player.hasPositionBeenEverChanged() ? player.getZ() : 0;
-    }
 
     private static int getUpdateFrequency() {
         return (target != null && target.getEntity() != null) ? NEARBY_UPDATE_INTERVAL : REMOTE_UPDATE_INTERVAL;
@@ -236,7 +218,6 @@ public class CompassHUD {
 
         Boolean withinRenderDistance = PlayerUtils.isWithinRenderDistance(target.getUuid());
         if ((withinRenderDistance == null) || (withinRenderDistance && target.getEntity() == null) || (!withinRenderDistance && target.getEntity() != null)) {
-//            player.sendMessage(Text.literal("<updateTrackedPlayer> " + withinRenderDistance + ", " + target.getEntity()), false);
             setTargetPlayer(target.getUuid(), target.getName(), true);
         }
 
@@ -245,7 +226,6 @@ public class CompassHUD {
             resetTarget();
         }
 
-//        if (target.getEntity() == null) lastRemoteDimension = target.getDimension();
         target.update();
     }
 }
