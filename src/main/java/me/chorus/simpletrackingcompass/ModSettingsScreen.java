@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class ModSettingsScreen extends Screen {
@@ -95,7 +96,9 @@ public class ModSettingsScreen extends Screen {
         PlayerEntity player = client.player;
         playerSelectorList.addEntry(player.getName().getString() + suffix);
 
-        Collection<PlayerListEntry> players = client.getNetworkHandler().getPlayerList();
+        Collection<PlayerListEntry> players = List.of();
+        if (client.getNetworkHandler() != null)
+            players = client.getNetworkHandler().getPlayerList();
 
         for (PlayerListEntry entry : players) {
             // Skip the current player
@@ -125,9 +128,9 @@ public class ModSettingsScreen extends Screen {
 
         if (selectedPlayerName != null && selectedPlayerName.endsWith(suffix)) {
             selectedPlayerName = selectedPlayerName.replace(suffix, "");
-            selectedPlayerUuid = client.player.getUuid();
+            selectedPlayerUuid = (client.player != null) ? client.player.getUuid() : null;
         }
-        else if (selectedPlayerName != null) {
+        else if (selectedPlayerName != null && client.getNetworkHandler() != null) {
             for (PlayerListEntry player : client.getNetworkHandler().getPlayerList()) {
                 if (player.getProfile().getName().equals(selectedPlayerName)) {
                     selectedPlayerUuid = player.getProfile().getId();

@@ -73,7 +73,8 @@ public class PlayerUtils {
     // Returns null if the player is not on the server
     public static Boolean isWithinRenderDistance(UUID uuid) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (uuid == null || client == null || client.world == null) return null;
+        if (uuid == null || client == null || client.world == null ||
+                client.getNetworkHandler() == null) return null;
 
         boolean listedInTab = false;
         for (PlayerListEntry p : client.getNetworkHandler().getPlayerList()) {
