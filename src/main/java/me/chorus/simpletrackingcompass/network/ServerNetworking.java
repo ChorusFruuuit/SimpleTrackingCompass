@@ -2,9 +2,7 @@ package me.chorus.simpletrackingcompass.network;
 
 import me.chorus.simpletrackingcompass.network.packet.*;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
