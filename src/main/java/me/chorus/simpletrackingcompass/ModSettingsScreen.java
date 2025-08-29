@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class ModSettingsScreen extends Screen {
@@ -49,10 +50,10 @@ public class ModSettingsScreen extends Screen {
         );
 
         ButtonWidget doneButton = ButtonWidget.builder(
-                    Text.translatable("gui.done"), btn -> closeScreen()
+                        Text.translatable("gui.done"), btn -> closeScreen()
                 )
                 .dimensions(donePos[0], donePos[1],
-                            donePos[2], donePos[3])
+                        donePos[2], donePos[3])
                 .build();
 
         addDrawableChild(doneButton);
@@ -64,16 +65,16 @@ public class ModSettingsScreen extends Screen {
         int hideY = (donePos[1] - 50) + (50 / 2 - donePos[3] / 2);
 
         ButtonWidget hideButton = ButtonWidget.builder(
-            Text.of(toggleLabel), btn -> {
-                CompassHUD.CompassHUDHidden = !CompassHUD.CompassHUDHidden;
+                        Text.of(toggleLabel), btn -> {
+                            CompassHUD.CompassHUDHidden = !CompassHUD.CompassHUDHidden;
 
-                String newLabel = CompassHUD.CompassHUDHidden ? "Hide Compass HUD: ON" : "Hide Compass HUD: OFF";
-                btn.setMessage(Text.of(newLabel));
-            }
-        )
-        .dimensions(donePos[0], hideY,
-                    donePos[2], donePos[3])
-        .build();
+                            String newLabel = CompassHUD.CompassHUDHidden ? "Hide Compass HUD: ON" : "Hide Compass HUD: OFF";
+                            btn.setMessage(Text.of(newLabel));
+                        }
+                )
+                .dimensions(donePos[0], hideY,
+                        donePos[2], donePos[3])
+                .build();
 
         addDrawableChild(hideButton);
 
@@ -95,7 +96,9 @@ public class ModSettingsScreen extends Screen {
         PlayerEntity player = client.player;
         playerSelectorList.addEntry(player.getName().getString() + suffix);
 
-        Collection<PlayerListEntry> players = client.getNetworkHandler().getPlayerList();
+        Collection<PlayerListEntry> players = List.of();
+        if (client.getNetworkHandler() != null)
+            players = client.getNetworkHandler().getPlayerList();
 
         for (PlayerListEntry entry : players) {
             // Skip the current player
@@ -125,9 +128,9 @@ public class ModSettingsScreen extends Screen {
 
         if (selectedPlayerName != null && selectedPlayerName.endsWith(suffix)) {
             selectedPlayerName = selectedPlayerName.replace(suffix, "");
-            selectedPlayerUuid = client.player.getUuid();
+            selectedPlayerUuid = (client.player != null) ? client.player.getUuid() : null;
         }
-        else if (selectedPlayerName != null) {
+        else if (selectedPlayerName != null && client.getNetworkHandler() != null) {
             for (PlayerListEntry player : client.getNetworkHandler().getPlayerList()) {
                 if (player.getProfile().getName().equals(selectedPlayerName)) {
                     selectedPlayerUuid = player.getProfile().getId();
