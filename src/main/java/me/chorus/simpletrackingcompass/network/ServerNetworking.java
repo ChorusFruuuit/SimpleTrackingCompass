@@ -19,7 +19,6 @@ public class ServerNetworking {
             if (target != null) {
                 Vec3d pos = target.getPos();
                 Identifier dimension = target.getWorld().getRegistryKey().getValue();
-//                MinecraftClient.getInstance().player.sendMessage(Text.literal("<ServerNetworking> " + dimension), false);
 
                 var response = new PlayerPositionResponsePayload(pos, dimension);
                 ServerPlayNetworking.send(requester, response);
