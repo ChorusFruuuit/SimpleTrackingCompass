@@ -16,20 +16,20 @@ public class PlayerUtils {
 
         Text message =
                 Text.literal(
-                    playerName
-                ).formatted(Formatting.YELLOW)
+                                playerName
+                        ).formatted(Formatting.YELLOW)
 
-            .append(
-                Text.literal(
-                    " cannot be found. Target Player was set back to:\n"
-                ).formatted(Formatting.RED)
-            )
+                        .append(
+                                Text.literal(
+                                        " cannot be found. Target Player was set back to:\n"
+                                ).formatted(Formatting.RED)
+                        )
 
-            .append(
-                Text.literal(
-                    client.player.getName().getString()
-                ).formatted(Formatting.YELLOW)
-            );
+                        .append(
+                                Text.literal(
+                                        client.player.getName().getString()
+                                ).formatted(Formatting.YELLOW)
+                        );
 
         client.player.sendMessage(message, false);
     }
@@ -40,14 +40,14 @@ public class PlayerUtils {
 
         Text message =
                 Text.literal(
-                    playerName
-                ).formatted(Formatting.YELLOW)
+                                playerName
+                        ).formatted(Formatting.YELLOW)
 
-            .append(
-                Text.literal(
-                    " is not within your render distance."
-                ).formatted(Formatting.GOLD)
-            );
+                        .append(
+                                Text.literal(
+                                        " is not within your render distance."
+                                ).formatted(Formatting.GOLD)
+                        );
 
         client.player.sendMessage(message, false);
     }
@@ -58,14 +58,14 @@ public class PlayerUtils {
 
         Text message =
                 Text.literal(
-                    playerName
-                ).formatted(Formatting.YELLOW)
+                                playerName
+                        ).formatted(Formatting.YELLOW)
 
-            .append(
-                Text.literal(
-                    String.format(" is in another dimension (%s).", dim)
-                ).formatted(Formatting.GOLD)
-            );
+                        .append(
+                                Text.literal(
+                                        String.format(" is in another dimension (%s).", dim)
+                                ).formatted(Formatting.GOLD)
+                        );
 
         client.player.sendMessage(message, false);
     }
@@ -73,7 +73,8 @@ public class PlayerUtils {
     // Returns null if the player is not on the server
     public static Boolean isWithinRenderDistance(UUID uuid) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (uuid == null || client == null || client.world == null) return null;
+        if (uuid == null || client == null || client.world == null ||
+                client.getNetworkHandler() == null) return null;
 
         boolean listedInTab = false;
         for (PlayerListEntry p : client.getNetworkHandler().getPlayerList()) {
