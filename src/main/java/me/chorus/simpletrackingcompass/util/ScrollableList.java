@@ -75,7 +75,10 @@ public class ScrollableList implements Drawable, Element, Selectable {
                 Text.literal("Search...")
         );
         this.searchField.setPlaceholder(Text.literal("Search..."));
-        this.searchField.setChangedListener(this::refreshVisibleEntries);
+        this.searchField.setChangedListener(changedListener -> {
+            selectedIndex = -1;
+            refreshVisibleEntries(changedListener);
+        });
 
         ((ScreenInvoker) screen).invokeAddDrawableChild(this.searchField);
         ((ScreenInvoker) screen).invokeAddDrawableChild(this);
