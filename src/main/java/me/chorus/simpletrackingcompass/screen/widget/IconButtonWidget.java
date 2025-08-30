@@ -2,7 +2,6 @@ package me.chorus.simpletrackingcompass.screen.widget;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -22,7 +21,6 @@ public class IconButtonWidget extends ButtonWidget {
         super.renderWidget(context, mouseX, mouseY, delta);
 
         context.drawTexture(
-                RenderLayer::getGuiTextured,
                 ICON_TEXTURE,
                 getX(), getY(),
                 0f, 0f,

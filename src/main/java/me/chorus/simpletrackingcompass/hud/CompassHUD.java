@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
@@ -109,7 +108,6 @@ public class CompassHUD {
                     int compassHeight = size[1];
 
                     context.drawTexture(
-                            RenderLayer::getGuiTextured,
                             COMPASS_ICON,
                             compassX, compassY,
                             compassU, compassV,
