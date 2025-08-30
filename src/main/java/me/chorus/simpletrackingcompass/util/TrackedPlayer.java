@@ -1,6 +1,6 @@
 package me.chorus.simpletrackingcompass.util;
 
-import me.chorus.simpletrackingcompass.network.packet.PlayerPositionRequestPayload;
+import me.chorus.simpletrackingcompass.network.packet.PlayerPositionRequest;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -61,7 +61,7 @@ public class TrackedPlayer {
             if (!wasPositionChanged) wasPositionChanged = true;
         }
         else {
-            ClientPlayNetworking.send(new PlayerPositionRequestPayload(uuid));
+            ClientPlayNetworking.send(new PlayerPositionRequest(uuid));
         }
     }
 

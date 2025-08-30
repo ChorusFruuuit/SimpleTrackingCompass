@@ -16,20 +16,20 @@ public class PlayerUtils {
 
         Text message =
                 Text.literal(
-                    playerName
-                ).formatted(Formatting.YELLOW)
+                                playerName
+                        ).formatted(Formatting.YELLOW)
 
-            .append(
-                Text.literal(
-                    " cannot be found. Target Player was set back to:\n"
-                ).formatted(Formatting.RED)
-            )
+                        .append(
+                                Text.literal(
+                                        " cannot be found. Target Player was set back to:\n"
+                                ).formatted(Formatting.RED)
+                        )
 
-            .append(
-                Text.literal(
-                    client.player.getName().getString()
-                ).formatted(Formatting.YELLOW)
-            );
+                        .append(
+                                Text.literal(
+                                        client.player.getName().getString()
+                                ).formatted(Formatting.YELLOW)
+                        );
 
         client.player.sendMessage(message, false);
     }
@@ -40,14 +40,14 @@ public class PlayerUtils {
 
         Text message =
                 Text.literal(
-                    playerName
-                ).formatted(Formatting.YELLOW)
+                                playerName
+                        ).formatted(Formatting.YELLOW)
 
-            .append(
-                Text.literal(
-                    " is not within your render distance."
-                ).formatted(Formatting.GOLD)
-            );
+                        .append(
+                                Text.literal(
+                                        " is not within your render distance."
+                                ).formatted(Formatting.GOLD)
+                        );
 
         client.player.sendMessage(message, false);
     }
@@ -58,14 +58,14 @@ public class PlayerUtils {
 
         Text message =
                 Text.literal(
-                    playerName
-                ).formatted(Formatting.YELLOW)
+                                playerName
+                        ).formatted(Formatting.YELLOW)
 
-            .append(
-                Text.literal(
-                    String.format(" is in another dimension (%s).", dim)
-                ).formatted(Formatting.GOLD)
-            );
+                        .append(
+                                Text.literal(
+                                        String.format(" is in another dimension (%s).", dim)
+                                ).formatted(Formatting.GOLD)
+                        );
 
         client.player.sendMessage(message, false);
     }

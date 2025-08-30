@@ -1,4 +1,4 @@
-package me.chorus.simpletrackingcompass.util;
+package me.chorus.simpletrackingcompass.screen.widget;
 
 import me.chorus.simpletrackingcompass.mixin.ScreenInvoker;
 import net.minecraft.client.MinecraftClient;
@@ -241,7 +241,7 @@ public class ScrollableList implements Drawable, Element, Selectable {
         String widest = "";
         for (String entry : visibleElements) {
             if (client.textRenderer.getWidth(entry) >
-                client.textRenderer.getWidth(widest)) {
+                    client.textRenderer.getWidth(widest)) {
                 widest = entry;
             }
         }
@@ -261,11 +261,11 @@ public class ScrollableList implements Drawable, Element, Selectable {
 
     private boolean insideEntry(double mouseX, double mouseY) {
         return mouseX >= x && mouseX <= x + width &&
-               mouseY >= y - entryHeight && mouseY <= y;
+                mouseY >= y - entryHeight && mouseY <= y;
     }
 
     private boolean insideList(double mouseX, double mouseY) {
         return mouseX >= x && mouseX <= x + width &&
-               mouseY >= y && mouseY <= y + height;
+                mouseY >= y && mouseY <= y + height;
     }
 }
