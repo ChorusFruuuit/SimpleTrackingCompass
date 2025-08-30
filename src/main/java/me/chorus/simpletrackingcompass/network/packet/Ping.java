@@ -7,12 +7,12 @@ import net.minecraft.util.Identifier;
 
 import static me.chorus.simpletrackingcompass.SimpleTrackingCompass.MOD_ID;
 
-public record ModPingPayload() implements CustomPayload {
-    public static final Id<ModPingPayload> ID = new Id<>(Identifier.of(MOD_ID, "mod_ping"));
+public record Ping() implements CustomPayload {
+    public static final Id<Ping> ID = new Id<>(Identifier.of(MOD_ID, "mod_ping"));
 
-    public static final PacketCodec<PacketByteBuf, ModPingPayload> CODEC = PacketCodec.of(
+    public static final PacketCodec<PacketByteBuf, Ping> CODEC = PacketCodec.of(
             (buf, payload) -> {},
-            buf -> new ModPingPayload()
+            buf -> new Ping()
     );
 
     @Override
