@@ -1,9 +1,9 @@
 package me.chorus.simpletrackingcompass.network;
 
-import me.chorus.simpletrackingcompass.CompassHUD;
-import me.chorus.simpletrackingcompass.network.packet.ModPingPayload;
-import me.chorus.simpletrackingcompass.network.packet.ModPongPayload;
-import me.chorus.simpletrackingcompass.network.packet.PlayerPositionResponsePayload;
+import me.chorus.simpletrackingcompass.hud.CompassHUD;
+import me.chorus.simpletrackingcompass.network.packet.Ping;
+import me.chorus.simpletrackingcompass.network.packet.Pong;
+import me.chorus.simpletrackingcompass.network.packet.PlayerPositionResponse;
 import me.chorus.simpletrackingcompass.util.TrackedPlayer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -14,7 +14,7 @@ public class ClientNetworking {
     public static void init() {
 
         ClientPlayConnectionEvents.JOIN.register((a, b, c) -> {
-            ClientPlayNetworking.send(new ModPingPayload());
+            ClientPlayNetworking.send(new Ping());
             CompassHUD.onJoin();
         });
 
@@ -22,7 +22,7 @@ public class ClientNetworking {
                 CompassHUD.IsServerModded = false
         );
 
-        ClientPlayNetworking.registerGlobalReceiver(PlayerPositionResponsePayload.ID, (payload, a) -> {
+        ClientPlayNetworking.registerGlobalReceiver(PlayerPositionResponse.ID, (payload, a) -> {
             Vec3d pos = payload.pos();
             Identifier dimension = payload.dimensionId();
 
@@ -32,7 +32,7 @@ public class ClientNetworking {
             }
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(ModPongPayload.ID, (a, b) ->
+        ClientPlayNetworking.registerGlobalReceiver(Pong.ID, (a, b) ->
             CompassHUD.IsServerModded = true
         );
     }
