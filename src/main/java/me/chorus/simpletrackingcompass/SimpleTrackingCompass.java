@@ -1,10 +1,10 @@
 package me.chorus.simpletrackingcompass;
 
 import me.chorus.simpletrackingcompass.network.ServerNetworking;
-import me.chorus.simpletrackingcompass.network.packet.ModPingPayload;
-import me.chorus.simpletrackingcompass.network.packet.ModPongPayload;
-import me.chorus.simpletrackingcompass.network.packet.PlayerPositionRequestPayload;
-import me.chorus.simpletrackingcompass.network.packet.PlayerPositionResponsePayload;
+import me.chorus.simpletrackingcompass.network.packet.Ping;
+import me.chorus.simpletrackingcompass.network.packet.Pong;
+import me.chorus.simpletrackingcompass.network.packet.PlayerPositionRequest;
+import me.chorus.simpletrackingcompass.network.packet.PlayerPositionResponse;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 
@@ -13,11 +13,11 @@ public class SimpleTrackingCompass implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        PayloadTypeRegistry.playC2S().register(PlayerPositionRequestPayload.ID, PlayerPositionRequestPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(PlayerPositionResponsePayload.ID, PlayerPositionResponsePayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(PlayerPositionRequest.ID, PlayerPositionRequest.CODEC);
+        PayloadTypeRegistry.playS2C().register(PlayerPositionResponse.ID, PlayerPositionResponse.CODEC);
 
-        PayloadTypeRegistry.playC2S().register(ModPingPayload.ID, ModPingPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(ModPongPayload.ID, ModPongPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(Ping.ID, Ping.CODEC);
+        PayloadTypeRegistry.playS2C().register(Pong.ID, Pong.CODEC);
 
         ServerNetworking.init();
     }

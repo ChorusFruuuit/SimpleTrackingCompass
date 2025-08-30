@@ -1,8 +1,8 @@
-package me.chorus.simpletrackingcompass.client;
+package me.chorus.simpletrackingcompass;
 
-import me.chorus.simpletrackingcompass.CompassHUD;
-import me.chorus.simpletrackingcompass.GameMenuCompassButton;
+import me.chorus.simpletrackingcompass.hud.CompassHUD;
 import me.chorus.simpletrackingcompass.network.ClientNetworking;
+import me.chorus.simpletrackingcompass.screen.widget.GameMenuCompassButton;
 import net.fabricmc.api.ClientModInitializer;
 
 public class SimpleTrackingCompassClient implements ClientModInitializer {

@@ -1,4 +1,4 @@
-package me.chorus.simpletrackingcompass;
+package me.chorus.simpletrackingcompass.hud;
 
 import me.chorus.simpletrackingcompass.util.ModUtils;
 import me.chorus.simpletrackingcompass.util.PlayerUtils;

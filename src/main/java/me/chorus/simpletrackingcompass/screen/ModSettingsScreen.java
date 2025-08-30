@@ -1,7 +1,8 @@
-package me.chorus.simpletrackingcompass;
+package me.chorus.simpletrackingcompass.screen;
 
+import me.chorus.simpletrackingcompass.hud.CompassHUD;
 import me.chorus.simpletrackingcompass.util.ModUtils;
-import me.chorus.simpletrackingcompass.util.ScrollableList;
+import me.chorus.simpletrackingcompass.screen.widget.ScrollableList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
@@ -50,10 +51,10 @@ public class ModSettingsScreen extends Screen {
         );
 
         ButtonWidget doneButton = ButtonWidget.builder(
-                    Text.translatable("gui.done"), btn -> closeScreen()
+                        Text.translatable("gui.done"), btn -> closeScreen()
                 )
                 .dimensions(donePos[0], donePos[1],
-                            donePos[2], donePos[3])
+                        donePos[2], donePos[3])
                 .build();
 
         addDrawableChild(doneButton);
@@ -65,16 +66,16 @@ public class ModSettingsScreen extends Screen {
         int hideY = (donePos[1] - 50) + (50 / 2 - donePos[3] / 2);
 
         ButtonWidget hideButton = ButtonWidget.builder(
-            Text.of(toggleLabel), btn -> {
-                CompassHUD.CompassHUDHidden = !CompassHUD.CompassHUDHidden;
+                        Text.of(toggleLabel), btn -> {
+                            CompassHUD.CompassHUDHidden = !CompassHUD.CompassHUDHidden;
 
-                String newLabel = CompassHUD.CompassHUDHidden ? "Hide Compass HUD: ON" : "Hide Compass HUD: OFF";
-                btn.setMessage(Text.of(newLabel));
-            }
-        )
-        .dimensions(donePos[0], hideY,
-                    donePos[2], donePos[3])
-        .build();
+                            String newLabel = CompassHUD.CompassHUDHidden ? "Hide Compass HUD: ON" : "Hide Compass HUD: OFF";
+                            btn.setMessage(Text.of(newLabel));
+                        }
+                )
+                .dimensions(donePos[0], hideY,
+                        donePos[2], donePos[3])
+                .build();
 
         addDrawableChild(hideButton);
 
