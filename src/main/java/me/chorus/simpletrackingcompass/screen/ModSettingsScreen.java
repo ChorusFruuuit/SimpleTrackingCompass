@@ -1,8 +1,8 @@
+package me.chorus.simpletrackingcompass.screen;
 
-package me.chorus.simpletrackingcompass;
-
+import me.chorus.simpletrackingcompass.hud.CompassHUD;
 import me.chorus.simpletrackingcompass.util.ModUtils;
-import me.chorus.simpletrackingcompass.util.ScrollableList;
+import me.chorus.simpletrackingcompass.screen.widget.ScrollableList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
