@@ -9,12 +9,12 @@ import java.util.UUID;
 
 import static me.chorus.simpletrackingcompass.SimpleTrackingCompass.MOD_ID;
 
-public record PlayerPositionRequestPayload(UUID targetUuid) implements CustomPayload {
-    public static final Id<PlayerPositionRequestPayload> ID = new Id<>(Identifier.of(MOD_ID, "request_position"));
+public record PlayerPositionRequest(UUID targetUuid) implements CustomPayload {
+    public static final Id<PlayerPositionRequest> ID = new Id<>(Identifier.of(MOD_ID, "request_position"));
 
-    public static final PacketCodec<PacketByteBuf, PlayerPositionRequestPayload> CODEC = PacketCodec.of(
+    public static final PacketCodec<PacketByteBuf, PlayerPositionRequest> CODEC = PacketCodec.of(
             (payload, buf) -> buf.writeUuid(payload.targetUuid),
-            buf -> new PlayerPositionRequestPayload(buf.readUuid())
+            buf -> new PlayerPositionRequest(buf.readUuid())
     );
 
     @Override

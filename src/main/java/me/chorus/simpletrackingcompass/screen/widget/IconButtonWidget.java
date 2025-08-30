@@ -1,4 +1,4 @@
-package me.chorus.simpletrackingcompass;
+package me.chorus.simpletrackingcompass.screen.widget;
 
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;

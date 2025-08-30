@@ -2,7 +2,7 @@ package me.chorus.simpletrackingcompass.compat;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import me.chorus.simpletrackingcompass.ModSettingsScreen;
+import me.chorus.simpletrackingcompass.screen.ModSettingsScreen;
 import net.minecraft.client.MinecraftClient;
 
 public class ModMenuIntegration implements ModMenuApi {
