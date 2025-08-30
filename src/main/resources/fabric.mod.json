@@ -16,7 +16,7 @@
   },
   "entrypoints": {
     "client": [
-      "me.chorus.simpletrackingcompass.client.SimpleTrackingCompassClient"
+      "me.chorus.simpletrackingcompass.SimpleTrackingCompassClient"
     ],
     "main": [
       "me.chorus.simpletrackingcompass.SimpleTrackingCompass"

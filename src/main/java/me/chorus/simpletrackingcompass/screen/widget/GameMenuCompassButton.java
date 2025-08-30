@@ -1,6 +1,7 @@
-package me.chorus.simpletrackingcompass;
+package me.chorus.simpletrackingcompass.screen.widget;
 
 import me.chorus.simpletrackingcompass.mixin.ScreenInvoker;
+import me.chorus.simpletrackingcompass.screen.ModSettingsScreen;
 import me.chorus.simpletrackingcompass.util.ModUtils;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.client.gui.screen.GameMenuScreen;
