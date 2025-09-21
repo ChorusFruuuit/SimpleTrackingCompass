@@ -1,12 +1,9 @@
-package me.chorus.simpletrackingcompass.screen.widget;
+package chorus.simpletrackingcompass.screen.widget;
 
-import me.chorus.simpletrackingcompass.mixin.ScreenInvoker;
+import chorus.simpletrackingcompass.util.Utils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.InputUtil;
@@ -21,16 +18,11 @@ public class ScrollableList implements Drawable, Element, Selectable {
     private final int y;
     private final int width;
     private final int height;
-    private final int totalItemHeight;
     private final int entryHeight;
     private final int offset = 4;
 
-    private boolean visible = false;
-
     private final TextFieldWidget searchField;
     private String filter = "";
-
-    private final MinecraftClient client;
 
     private final List<String> allElements = new ArrayList<>();
     private final List<String> visibleElements = new ArrayList<>();
@@ -45,56 +37,39 @@ public class ScrollableList implements Drawable, Element, Selectable {
     // Implementation of abstract methods
 
     @Override
-    public void setFocused(boolean focused) { }
+    public SelectionType getType() {
+        return SelectionType.NONE;
+    }
 
     @Override
-    public boolean isFocused() { return false; }
-
-    @Override
-    public SelectionType getType() { return SelectionType.NONE; }
-
-    @Override
-    public void appendNarrations(NarrationMessageBuilder builder) { }
+    public void appendNarrations(NarrationMessageBuilder builder) {
+    }
 
     // Constructor
 
-    public ScrollableList(MinecraftClient client, Screen screen, int x, int y, int width, int height,
-                          int itemHeight, int entryHeight, boolean isInside) {
-        this.client = client;
+    public ScrollableList(int x, int y, int width, int height,
+                          int entryHeight, int searchFieldHeight,
+                          boolean isInside) {
         this.x = x;
         this.y = y;
         this.width = width;
-        this.height = isInside ? height - entryHeight : height;
-        this.totalItemHeight = itemHeight + this.offset;
-        this.entryHeight = entryHeight;
+        this.height = isInside ? height - searchFieldHeight : height;
+        this.entryHeight = entryHeight + this.offset;
 
         this.searchField = new TextFieldWidget(
-                client.textRenderer,
-                x, y - entryHeight,
-                width, entryHeight,
-                Text.literal("Search...")
+            getTextRenderer(),
+            x, y - searchFieldHeight,
+            width, searchFieldHeight,
+            Text.literal("Search...")
         );
         this.searchField.setPlaceholder(Text.literal("Search..."));
         this.searchField.setChangedListener(changedListener -> {
             selectedIndex = -1;
             refreshVisibleEntries(changedListener);
         });
-
-        ((ScreenInvoker) screen).invokeAddDrawableChild(this.searchField);
-        ((ScreenInvoker) screen).invokeAddDrawableChild(this);
-    }
-
-    //  Public method for showing and hiding the list
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
     }
 
     // Setters and Getters
-
-    public boolean isHidden() {
-        return !this.visible;
-    }
 
     public boolean isSelected() {
         return selectedIndex != -1;
@@ -113,6 +88,7 @@ public class ScrollableList implements Drawable, Element, Selectable {
         return visibleElements.get(index);
     }
 
+    @SuppressWarnings("unused")
     public String removeEntry(int index) {
         String removed = allElements.remove(index);
         refreshVisibleEntries(this.filter);
@@ -123,7 +99,7 @@ public class ScrollableList implements Drawable, Element, Selectable {
         return isSelected() ? this.selectedIndex : null;
     }
 
-    public List<String> getAllElements() {
+    public List<String> getElements() {
         return allElements;
     }
 
@@ -131,25 +107,26 @@ public class ScrollableList implements Drawable, Element, Selectable {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (isHidden()) return;
-
         this.searchField.render(context, mouseX, mouseY, delta);
 
         context.fill(x, y, x + width, y + height, 0xAA000000);
         context.enableScissor(x, y, x + width, y + height);
 
-        int visibleCount = height / totalItemHeight;
-        int startIndex = (int) Math.round((double) scrollY / (double) totalItemHeight);
+        int visibleCount = height / entryHeight;
+        int startIndex = (int) Math.round((double) scrollY / (double) entryHeight);
 
         for (int i = 0; (i < visibleCount) && (startIndex + i < visibleElements.size()); i++) {
             String text = visibleElements.get(startIndex + i);
             int color = (startIndex + i == selectedIndex && isSelected())
-                    ? 0xFF808080 : 0xFFFFFFFF;
+                ? 0xFF808080 : 0xFFFFFFFF;
 
-            int drawX = offset + (x - scrollX);
-            int drawY = offset + (y + i * totalItemHeight);
-
-            context.drawText(client.textRenderer, text, drawX, drawY, color, false);
+            context.drawTextWithShadow(
+                getTextRenderer(),
+                Text.literal(text),
+                offset + (x - scrollX),
+                offset + (y + i * entryHeight),
+                color
+            );
         }
 
         context.disableScissor();
@@ -158,77 +135,87 @@ public class ScrollableList implements Drawable, Element, Selectable {
     // Mouse and keyboard event methods
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        if (isHidden()) return false;
+    public void setFocused(boolean focused) {
+    }
 
-        if (insideList(mouseX, mouseY)) {
-            if (isShiftDown()) {
-                scrollX -= (int) (verticalAmount * 5);
-                scrollX = Math.min(maxScrollX, Math.max(0, scrollX));
-            } else {
-                scrollY -= (int) (verticalAmount * totalItemHeight);
-                scrollY = Math.min(maxScrollY, Math.max(0, scrollY));
-            }
+    @Override
+    public boolean isFocused() {
+        return searchField.isFocused() || selectedIndex != -1;
+    }
+
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        return true;
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        if (!insideList(mouseX, mouseY)) return false;
+
+        if (isShiftDown()) {
+            scrollX -= (int) (verticalAmount * 5);
+            scrollX = Math.min(maxScrollX, Math.max(0, scrollX));
+        } else {
+            scrollY -= (int) (verticalAmount * entryHeight);
+            scrollY = Math.min(maxScrollY, Math.max(0, scrollY));
         }
 
         return true;
     }
 
     @Override
-    public boolean isMouseOver(double mouseX, double mouseY) {
-        if (isHidden()) return false;
-
-        return !insideEntry(mouseX, mouseY);
-    }
-
-    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (isHidden()) return false;
+        boolean clickedSearch = searchField.isMouseOver(mouseX, mouseY);
+        boolean clickedList = insideList(mouseX, mouseY);
 
-        boolean clickedInsideEntry = insideEntry(mouseX, mouseY);
-        boolean clickedInsideList = insideList(mouseX, mouseY);
-
-        if (!clickedInsideEntry && !clickedInsideList && searchField.isFocused()) {
+        if (clickedSearch && !searchField.isFocused()) {
+            searchField.setFocused(true);
+            selectedIndex = -1;
+        } else if (!clickedSearch && searchField.isFocused() &&
+            (!clickedList || searchField.getText().isEmpty())) {
             searchField.setFocused(false);
             searchField.setText("");
         }
 
-        if (clickedInsideList){
+        if (clickedList) {
             int previouslySelectedIndex = selectedIndex;
             selectedIndex = (int) Math.min(
-                    Math.max(0, Math.floor((mouseY - y + scrollY) / totalItemHeight)),
-                    visibleElements.size() - 1
+                Math.max(0, Math.floor((mouseY - y + scrollY) / entryHeight)),
+                visibleElements.size() - 1
             );
             if (selectedIndex == previouslySelectedIndex) selectedIndex = -1;
         }
 
-        return clickedInsideEntry || clickedInsideList;
-    }
-
-    @Override
-    public boolean charTyped(char chr, int modifiers) {
-        if (isHidden()) return false;
-        return searchField.charTyped(chr, modifiers);
+        return clickedSearch || clickedList;
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (isHidden()) return false;
         return searchField.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char chr, int modifiers) {
+        return searchField.charTyped(chr, modifiers);
     }
 
     // Private helper methods
 
+    private TextRenderer getTextRenderer() {
+        return MinecraftClient.getInstance().textRenderer;
+    }
+
     private boolean isShiftDown() {
         long window = MinecraftClient.getInstance().getWindow().getHandle();
         return InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_SHIFT)
-                || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
+            || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
     private void filterVisibleEntries(String filter) {
         visibleElements.clear();
         for (String element : allElements) {
-            if (element.trim().toLowerCase().contains(filter.trim().toLowerCase())) {
+            if (Utils.removeWhitespace(element.toLowerCase()).contains(
+                Utils.removeWhitespace(filter.toLowerCase()))) {
                 visibleElements.add(element);
             }
         }
@@ -240,8 +227,8 @@ public class ScrollableList implements Drawable, Element, Selectable {
 
         String widest = "";
         for (String entry : visibleElements) {
-            if (client.textRenderer.getWidth(entry) >
-                    client.textRenderer.getWidth(widest)) {
+            if (getTextRenderer().getWidth(entry) >
+                getTextRenderer().getWidth(widest)) {
                 widest = entry;
             }
         }
@@ -252,20 +239,15 @@ public class ScrollableList implements Drawable, Element, Selectable {
     }
 
     private void calculateScrollBounds(String text) {
-        int contentHeight = visibleElements.size() * totalItemHeight;
+        int contentHeight = visibleElements.size() * entryHeight;
         maxScrollY = Math.max(0, contentHeight - height);
 
-        int elementWidth = client.textRenderer.getWidth(text) + 2 * offset;
+        int elementWidth = getTextRenderer().getWidth(text) + 2 * offset;
         maxScrollX = Math.max(0, elementWidth - width);
-    }
-
-    private boolean insideEntry(double mouseX, double mouseY) {
-        return mouseX >= x && mouseX <= x + width &&
-                mouseY >= y - entryHeight && mouseY <= y;
     }
 
     private boolean insideList(double mouseX, double mouseY) {
         return mouseX >= x && mouseX <= x + width &&
-                mouseY >= y && mouseY <= y + height;
+            mouseY >= y && mouseY <= y + height;
     }
 }

@@ -1,4 +1,4 @@
-package me.chorus.simpletrackingcompass.screen.widget;
+package chorus.simpletrackingcompass.screen.widget;
 
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
@@ -7,14 +7,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class IconButtonWidget extends ButtonWidget {
-    private static Identifier ICON_TEXTURE;
+    private static Identifier TEXTURE;
 
     public IconButtonWidget(int x, int y, int width, int height,
-                            PressAction onPress, Identifier id) {
-        super(x, y, width, height, Text.empty(), onPress,
-              DEFAULT_NARRATION_SUPPLIER);
-
-        ICON_TEXTURE = id;
+                            Identifier texture, PressAction onPress) {
+        super(x, y, width, height, Text.empty(), onPress, DEFAULT_NARRATION_SUPPLIER);
+        TEXTURE = texture;
     }
 
     @Override
@@ -22,12 +20,10 @@ public class IconButtonWidget extends ButtonWidget {
         super.renderWidget(context, mouseX, mouseY, delta);
 
         context.drawTexture(
-                RenderPipelines.GUI_TEXTURED,
-                ICON_TEXTURE,
-                getX(), getY(),
-                0f, 0f,
-                getWidth(), getHeight(),
-                getWidth(), getHeight()
+            RenderPipelines.GUI_TEXTURED, TEXTURE,
+            getX(), getY(), 0f, 0f,
+            getWidth(), getHeight(),
+            getWidth(), getHeight()
         );
     }
 }

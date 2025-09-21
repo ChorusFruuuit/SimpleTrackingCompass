@@ -16,13 +16,13 @@
   },
   "entrypoints": {
     "client": [
-      "me.chorus.simpletrackingcompass.SimpleTrackingCompassClient"
+      "chorus.simpletrackingcompass.SimpleTrackingCompassClient"
     ],
     "main": [
-      "me.chorus.simpletrackingcompass.SimpleTrackingCompass"
+      "chorus.simpletrackingcompass.SimpleTrackingCompass"
     ],
     "modmenu": [
-      "me.chorus.simpletrackingcompass.compat.ModMenuIntegration"
+      "chorus.simpletrackingcompass.compat.ModMenuIntegration"
     ]
   },
   "mixins": [

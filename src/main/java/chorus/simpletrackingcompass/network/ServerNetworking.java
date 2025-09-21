@@ -1,6 +1,6 @@
-package me.chorus.simpletrackingcompass.network;
+package chorus.simpletrackingcompass.network;
 
-import me.chorus.simpletrackingcompass.network.packet.*;
+import chorus.simpletrackingcompass.network.packet.*;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -18,12 +18,12 @@ public class ServerNetworking {
                 Vec3d pos = target.getPos();
                 Identifier dimension = target.getWorld().getRegistryKey().getValue();
 
-                var response = new PlayerPositionResponse(pos, dimension);
+                PlayerPositionResponse response = new PlayerPositionResponse(pos, dimension);
                 ServerPlayNetworking.send(requester, response);
             }
         });
 
-        ServerPlayNetworking.registerGlobalReceiver(Ping.ID, (a, context) ->
+        ServerPlayNetworking.registerGlobalReceiver(Ping.ID, (payload, context) ->
             ServerPlayNetworking.send(context.player(), new Pong())
         );
     }

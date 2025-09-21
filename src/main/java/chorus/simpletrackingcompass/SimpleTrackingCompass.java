@@ -1,10 +1,10 @@
-package me.chorus.simpletrackingcompass;
+package chorus.simpletrackingcompass;
 
-import me.chorus.simpletrackingcompass.network.ServerNetworking;
-import me.chorus.simpletrackingcompass.network.packet.Ping;
-import me.chorus.simpletrackingcompass.network.packet.Pong;
-import me.chorus.simpletrackingcompass.network.packet.PlayerPositionRequest;
-import me.chorus.simpletrackingcompass.network.packet.PlayerPositionResponse;
+import chorus.simpletrackingcompass.network.ServerNetworking;
+import chorus.simpletrackingcompass.network.packet.Ping;
+import chorus.simpletrackingcompass.network.packet.Pong;
+import chorus.simpletrackingcompass.network.packet.PlayerPositionRequest;
+import chorus.simpletrackingcompass.network.packet.PlayerPositionResponse;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 

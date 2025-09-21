@@ -1,6 +1,6 @@
-package me.chorus.simpletrackingcompass.util;
+package chorus.simpletrackingcompass.util;
 
-import me.chorus.simpletrackingcompass.network.packet.PlayerPositionRequest;
+import chorus.simpletrackingcompass.network.packet.PlayerPositionRequest;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -17,8 +17,6 @@ public class TrackedPlayer {
     private Identifier dimension = null;
     private double x = 0;
     private double z = 0;
-
-    private boolean wasPositionChanged = false;
 
     public TrackedPlayer(PlayerEntity player) {
         this.entity = player;
@@ -38,29 +36,36 @@ public class TrackedPlayer {
         this.update();
     }
 
-    public PlayerEntity getEntity() {return entity;}
+    public PlayerEntity getEntity() {
+        return entity;
+    }
 
-    public UUID getUuid() {return uuid;}
+    public UUID getUuid() {
+        return uuid;
+    }
 
-    public String getName() {return name;}
+    public String getName() {
+        return name;
+    }
 
-    public Identifier getDimension() {return dimension;}
+    public Identifier getDimension() {
+        return dimension;
+    }
 
-    public double getX() {return x;}
+    public double getX() {
+        return x;
+    }
 
-    public double getZ() {return z;}
-
-    public boolean hasPositionBeenEverChanged() {return wasPositionChanged;}
+    public double getZ() {
+        return z;
+    }
 
     public void update() {
         if (entity != null) {
             dimension = entity.getWorld().getRegistryKey().getValue();
             x = entity.getX();
             z = entity.getZ();
-
-            if (!wasPositionChanged) wasPositionChanged = true;
-        }
-        else {
+        } else {
             ClientPlayNetworking.send(new PlayerPositionRequest(uuid));
         }
     }
@@ -69,7 +74,5 @@ public class TrackedPlayer {
         this.dimension = dim;
         this.x = pos.x;
         this.z = pos.z;
-
-        if (!wasPositionChanged) wasPositionChanged = true;
     }
 }
