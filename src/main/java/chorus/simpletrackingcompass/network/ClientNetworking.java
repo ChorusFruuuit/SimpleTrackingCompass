@@ -31,11 +31,11 @@ public class ClientNetworking {
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             ClientPlayNetworking.send(new Ping());
-            CompassHUD.onJoin();
+            CompassHUD.handleClientJoin();
         });
 
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) ->
-            CompassHUD.IsServerModded = false
+            CompassHUD.isServerModded = false
         );
 
         ClientLifecycleEvents.CLIENT_STOPPING.register(client ->
@@ -49,14 +49,14 @@ public class ClientNetworking {
             Vec3d pos = payload.pos();
             Identifier dimension = payload.dimensionId();
 
-            TrackedPlayer tracked = CompassHUD.getTarget();
+            TrackedPlayer tracked = CompassHUD.getTrackedPlayer();
             if (tracked != null) {
                 tracked.setRemoteData(dimension, pos);
             }
         });
 
         ClientPlayNetworking.registerGlobalReceiver(Pong.ID, (payload, context) ->
-            CompassHUD.IsServerModded = true
+            CompassHUD.isServerModded = true
         );
     }
 }

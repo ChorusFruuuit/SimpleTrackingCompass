@@ -73,18 +73,18 @@ public class TargetSelectorScreen extends Screen {
 
         CyclingButtonWidget<Boolean> toggleButton = CyclingButtonWidget
             .onOffBuilder()
-            .initially(CompassHUD.CompassHUDHidden)
+            .initially(CompassHUD.isCompassHUDHidden)
             .build(
                 doneBounds[0], toggleY,
                 doneBounds[2], doneBounds[3],
                 Text.literal("Hide Compass HUD"),
                 (btn, value) ->
-                    CompassHUD.CompassHUDHidden = value
+                    CompassHUD.isCompassHUDHidden = value
             );
 
         addDrawableChild(toggleButton);
 
-        // Slider for controlling how often the compass refreshes its direction
+        // Slider for configuring how often is the compass needle updated
 
         RangeSliderWidget compassUpdateSlider = new RangeSliderWidget(
             doneBounds[0], doneBounds[1] - 200,
@@ -95,7 +95,7 @@ public class TargetSelectorScreen extends Screen {
 
         compassUpdateSlider.setLabelAndTooltip(
             Text.literal("Compass Update Delay"),
-            Text.literal("How often the compass updates its direction (in ticks).\nLower = faster updates.")
+            Text.literal("How often is the compass needle updated (in ticks).\nLower = faster updates.")
         );
 
         addDrawableChild(compassUpdateSlider);
@@ -175,7 +175,7 @@ public class TargetSelectorScreen extends Screen {
             }
         }
 
-        CompassHUD.setTarget(selectedPlayerUuid, selectedPlayerName, false);
+        CompassHUD.setTrackedPlayer(selectedPlayerUuid, selectedPlayerName, false);
 
         client.setScreen(this.parent);
     }
