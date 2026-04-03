@@ -13,7 +13,7 @@ import static chorus.simpletrackingcompass.SimpleTrackingCompass.MOD_ID;
 
 public class TargetSelectorScreenButtonAdder {
     private static final Identifier ICON = Identifier.of(
-        MOD_ID, "textures/gui/compass_404.png"
+        MOD_ID, "textures/gui/compass_32.png"
     );
 
     public static void register() {

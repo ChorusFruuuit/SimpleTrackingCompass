@@ -154,10 +154,10 @@ public class ScrollableList implements Drawable, Element, Selectable {
 
         if (isShiftDown()) {
             scrollX -= (int) (verticalAmount * 5);
-            scrollX = Math.min(maxScrollX, Math.max(0, scrollX));
+            scrollX = Math.clamp(scrollX, 0, maxScrollX);
         } else {
             scrollY -= (int) (verticalAmount * entryHeight);
-            scrollY = Math.min(maxScrollY, Math.max(0, scrollY));
+            scrollY = Math.clamp(scrollY, 0, maxScrollY);
         }
 
         return true;
@@ -179,8 +179,9 @@ public class ScrollableList implements Drawable, Element, Selectable {
 
         if (clickedList) {
             int previouslySelectedIndex = selectedIndex;
-            selectedIndex = (int) Math.min(
-                Math.max(0, Math.floor((mouseY - y + scrollY) / entryHeight)),
+            selectedIndex = (int) Math.clamp(
+                Math.floor((mouseY - y + scrollY) / entryHeight),
+                0,
                 visibleElements.size() - 1
             );
             if (selectedIndex == previouslySelectedIndex) selectedIndex = -1;
@@ -234,8 +235,8 @@ public class ScrollableList implements Drawable, Element, Selectable {
         }
         calculateScrollBounds(widest);
 
-        scrollY = Math.min(maxScrollY, Math.max(0, scrollY));
-        scrollX = Math.min(maxScrollX, Math.max(0, scrollX));
+        scrollY = Math.clamp(scrollY, 0, maxScrollY);
+        scrollX = Math.clamp(scrollX, 0, maxScrollX);
     }
 
     private void calculateScrollBounds(String text) {

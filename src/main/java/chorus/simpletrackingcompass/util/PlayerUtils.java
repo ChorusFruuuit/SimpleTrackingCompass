@@ -25,7 +25,7 @@ public class PlayerUtils {
 
                 .append(
                     Text.literal(
-                        " cannot be found. Target Player was set back to:\n"
+                        " cannot be found. Target Player was set back to:"
                     ).formatted(Formatting.RED)
                 )
 
