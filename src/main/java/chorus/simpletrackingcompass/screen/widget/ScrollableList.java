@@ -6,7 +6,10 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.CharInput;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
@@ -164,9 +167,9 @@ public class ScrollableList implements Drawable, Element, Selectable {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        boolean clickedSearch = searchField.isMouseOver(mouseX, mouseY);
-        boolean clickedList = insideList(mouseX, mouseY);
+    public boolean mouseClicked(Click click, boolean doubled) {
+        boolean clickedSearch = searchField.isMouseOver(click.x(), click.y());
+        boolean clickedList = insideList(click.x(), click.y());
 
         if (clickedSearch && !searchField.isFocused()) {
             searchField.setFocused(true);
@@ -180,7 +183,7 @@ public class ScrollableList implements Drawable, Element, Selectable {
         if (clickedList) {
             int previouslySelectedIndex = selectedIndex;
             selectedIndex = (int) Math.clamp(
-                Math.floor((mouseY - y + scrollY) / entryHeight),
+                Math.floor((click.y() - y + scrollY) / entryHeight),
                 0,
                 visibleElements.size() - 1
             );
@@ -191,13 +194,13 @@ public class ScrollableList implements Drawable, Element, Selectable {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return searchField.keyPressed(keyCode, scanCode, modifiers);
+    public boolean keyPressed(KeyInput input) {
+        return searchField.keyPressed(input);
     }
 
     @Override
-    public boolean charTyped(char chr, int modifiers) {
-        return searchField.charTyped(chr, modifiers);
+    public boolean charTyped(CharInput input) {
+        return searchField.charTyped(input);
     }
 
     // Private helper methods
@@ -207,7 +210,7 @@ public class ScrollableList implements Drawable, Element, Selectable {
     }
 
     private boolean isShiftDown() {
-        long window = MinecraftClient.getInstance().getWindow().getHandle();
+        Window window = MinecraftClient.getInstance().getWindow();
         return InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_SHIFT)
             || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
     }

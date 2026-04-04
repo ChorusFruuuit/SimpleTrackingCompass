@@ -122,10 +122,10 @@ public class TargetSelectorScreen extends Screen {
         // Add players to the list
         for (PlayerListEntry entry : players) {
             GameProfile profile = entry.getProfile();
-            String name = profile.getName();
+            String name = profile.name();
 
             // Skip the client.player because it has already been added
-            if (profile.getId().equals(player.getUuid()) || name.trim().isEmpty())
+            if (profile.id().equals(player.getUuid()) || name.trim().isEmpty())
                 continue;
 
             // Add the player to the list
@@ -168,8 +168,8 @@ public class TargetSelectorScreen extends Screen {
             selectedPlayerUuid = (client.player != null) ? client.player.getUuid() : null;
         } else if (selectedPlayerName != null && client.getNetworkHandler() != null) {
             for (PlayerListEntry player : client.getNetworkHandler().getPlayerList()) {
-                if (player.getProfile().getName().equals(selectedPlayerName)) {
-                    selectedPlayerUuid = player.getProfile().getId();
+                if (player.getProfile().name().equals(selectedPlayerName)) {
+                    selectedPlayerUuid = player.getProfile().id();
                     break;
                 }
             }

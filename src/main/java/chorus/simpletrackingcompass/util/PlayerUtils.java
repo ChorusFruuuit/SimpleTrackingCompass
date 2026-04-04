@@ -121,7 +121,7 @@ public class PlayerUtils {
 
         boolean listedInTab = false;
         for (PlayerListEntry p : client.getNetworkHandler().getPlayerList()) {
-            if (p.getProfile().getId().equals(uuid)) {
+            if (p.getProfile().id().equals(uuid)) {
                 listedInTab = true;
                 break;
             }

@@ -62,7 +62,7 @@ public class TrackedPlayer {
 
     public void update() {
         if (entity != null) {
-            dimension = entity.getWorld().getRegistryKey().getValue();
+            dimension = entity.getEntityWorld().getRegistryKey().getValue();
             x = entity.getX();
             z = entity.getZ();
         } else {

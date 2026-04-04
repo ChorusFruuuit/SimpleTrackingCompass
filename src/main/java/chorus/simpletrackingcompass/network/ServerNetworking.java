@@ -13,10 +13,11 @@ public class ServerNetworking {
         ServerPlayNetworking.registerGlobalReceiver(PlayerPositionRequest.ID, (payload, context) -> {
             ServerPlayerEntity requester = context.player();
             UUID targetUuid = payload.targetUuid();
-            ServerPlayerEntity target = requester.getServer() != null ? requester.getServer().getPlayerManager().getPlayer(targetUuid) : null;
+            requester.getEntityWorld();
+            ServerPlayerEntity target = requester.getEntityWorld().getServer().getPlayerManager().getPlayer(targetUuid);
             if (target != null) {
-                Vec3d pos = target.getPos();
-                Identifier dimension = target.getWorld().getRegistryKey().getValue();
+                Vec3d pos = target.getEntityPos();
+                Identifier dimension = target.getEntityWorld().getRegistryKey().getValue();
 
                 PlayerPositionResponse response = new PlayerPositionResponse(pos, dimension);
                 ServerPlayNetworking.send(requester, response);
