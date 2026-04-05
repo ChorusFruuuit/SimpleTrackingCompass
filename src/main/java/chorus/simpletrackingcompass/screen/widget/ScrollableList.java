@@ -182,11 +182,13 @@ public class ScrollableList implements Drawable, Element, Selectable {
 
         if (clickedList) {
             int previouslySelectedIndex = selectedIndex;
-            selectedIndex = (int) Math.clamp(
-                Math.floor((click.y() - y + scrollY) / entryHeight),
-                0,
-                visibleElements.size() - 1
-            );
+            selectedIndex = visibleElements.isEmpty()
+                ? -1
+                : (int) Math.clamp(
+                    Math.floor((click.y() - y + scrollY) / entryHeight),
+                    0,
+                    visibleElements.size() - 1
+                );
             if (selectedIndex == previouslySelectedIndex) selectedIndex = -1;
         }
 
