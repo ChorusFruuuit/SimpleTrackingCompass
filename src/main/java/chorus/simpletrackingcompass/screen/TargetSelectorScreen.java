@@ -49,7 +49,6 @@ public class TargetSelectorScreen extends Screen {
         );
 
         optionsScreen.init(
-            client,
             this.width,
             this.height
         );
@@ -71,8 +70,7 @@ public class TargetSelectorScreen extends Screen {
         int toggleY = (doneBounds[1] - 50) + (50 / 2 - doneBounds[3] / 2);
 
         CyclingButtonWidget<Boolean> toggleButton = CyclingButtonWidget
-            .onOffBuilder()
-            .initially(CompassHUD.isCompassHUDHidden)
+            .onOffBuilder(CompassHUD.isCompassHUDHidden)
             .build(
                 doneBounds[0], toggleY,
                 doneBounds[2], doneBounds[3],
