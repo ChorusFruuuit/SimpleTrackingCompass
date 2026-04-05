@@ -38,7 +38,6 @@ public class TargetSelectorScreen extends Screen {
 
     @Override
     protected void init() {
-
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
 

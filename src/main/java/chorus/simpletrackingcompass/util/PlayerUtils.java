@@ -103,7 +103,7 @@ public class PlayerUtils {
                             )
                         )
                 )
-                .append(Text.literal(" or open it manually via")
+                .append(Text.literal(" or open the selector manually via")
                     .formatted(Formatting.BLUE))
                 .append(Text.literal("\nESC → Compass Button")
                     .formatted(Formatting.YELLOW));

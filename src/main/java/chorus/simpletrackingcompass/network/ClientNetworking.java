@@ -23,7 +23,11 @@ public class ClientNetworking {
             dispatcher.register(ClientCommandManager.literal("selector")
                 .executes(context -> {
                     MinecraftClient client = MinecraftClient.getInstance();
-                    client.setScreen(new TargetSelectorScreen(client.currentScreen));
+
+                    client.send(() ->
+                        client.setScreen(new TargetSelectorScreen(null))
+                    );
+
                     return Command.SINGLE_SUCCESS;
                 })
             )
