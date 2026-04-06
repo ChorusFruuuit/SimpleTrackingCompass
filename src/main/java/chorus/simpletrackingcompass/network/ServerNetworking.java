@@ -2,28 +2,29 @@ package chorus.simpletrackingcompass.network;
 
 import chorus.simpletrackingcompass.network.packet.*;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 import java.util.UUID;
 
 public class ServerNetworking {
     public static void init() {
         ServerPlayNetworking.registerGlobalReceiver(PlayerPositionRequest.ID, (payload, context) -> {
-            ServerPlayerEntity requester = context.player();
+            ServerPlayer requester = context.player();
             UUID targetUuid = payload.targetUuid();
-            ServerPlayerEntity target = requester.getEntityWorld().getServer() != null ? requester.getEntityWorld().getServer().getPlayerManager().getPlayer(targetUuid) : null;
+            @SuppressWarnings("resource")
+            ServerPlayer target = requester.level().getServer().getPlayerList().getPlayer(targetUuid);
             if (target != null) {
-                Vec3d pos = target.getEntityPos();
-                Identifier dimension = target.getEntityWorld().getRegistryKey().getValue();
+                Vec3 pos = target.position();
+                @SuppressWarnings("resource")
+                Identifier dimension = target.level().dimension().identifier();
 
                 PlayerPositionResponse response = new PlayerPositionResponse(pos, dimension);
                 ServerPlayNetworking.send(requester, response);
             }
         });
 
-        ServerPlayNetworking.registerGlobalReceiver(Ping.ID, (payload, context) ->
+        ServerPlayNetworking.registerGlobalReceiver(Ping.ID, (_, context) ->
             ServerPlayNetworking.send(context.player(), new Pong())
         );
     }

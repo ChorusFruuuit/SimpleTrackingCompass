@@ -1,23 +1,25 @@
 package chorus.simpletrackingcompass.network.packet;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
-
 import static chorus.simpletrackingcompass.SimpleTrackingCompass.MOD_ID;
 
-public record Pong() implements CustomPayload {
-    public static final Id<Pong> ID = new Id<>(Identifier.of(MOD_ID, "mod_pong"));
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
 
-    public static final PacketCodec<PacketByteBuf, Pong> CODEC = PacketCodec.of(
-        (payload, buf) -> {
+public record Pong() implements CustomPacketPayload {
+    public static final Type<Pong> ID = new Type<>(Identifier.fromNamespaceAndPath(MOD_ID, "mod_pong"));
+
+    public static final StreamCodec<FriendlyByteBuf, Pong> CODEC = StreamCodec.ofMember(
+        (_, _) -> {
         },
-        buf -> new Pong()
+        _ -> new Pong()
     );
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    @NonNull
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

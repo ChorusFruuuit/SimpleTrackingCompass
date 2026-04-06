@@ -2,14 +2,13 @@ package chorus.simpletrackingcompass.util;
 
 import chorus.simpletrackingcompass.network.packet.PlayerPositionRequest;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import java.util.UUID;
 
 public class TrackedPlayer {
-    private final PlayerEntity entity; // if null -- TrackedPlayer is remote
+    private final Player entity; // if null -- TrackedPlayer is remote
 
     private final UUID uuid;
     private final String name;
@@ -18,10 +17,10 @@ public class TrackedPlayer {
     private double x = 0;
     private double z = 0;
 
-    public TrackedPlayer(PlayerEntity player) {
+    public TrackedPlayer(Player player) {
         this.entity = player;
 
-        this.uuid = player.getUuid();
+        this.uuid = player.getUUID();
         this.name = player.getName().getString();
 
         this.update();
@@ -36,7 +35,7 @@ public class TrackedPlayer {
         this.update();
     }
 
-    public PlayerEntity getEntity() {
+    public Player getEntity() {
         return entity;
     }
 
@@ -60,9 +59,10 @@ public class TrackedPlayer {
         return z;
     }
 
+    @SuppressWarnings("resource")
     public void update() {
         if (entity != null) {
-            dimension = entity.getEntityWorld().getRegistryKey().getValue();
+            dimension = entity.level().dimension().identifier();
             x = entity.getX();
             z = entity.getZ();
         } else {
@@ -70,7 +70,7 @@ public class TrackedPlayer {
         }
     }
 
-    public void setRemoteData(Identifier dim, Vec3d pos) {
+    public void setRemoteData(Identifier dim, Vec3 pos) {
         this.dimension = dim;
         this.x = pos.x;
         this.z = pos.z;

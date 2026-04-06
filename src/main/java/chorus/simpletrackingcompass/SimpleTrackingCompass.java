@@ -13,11 +13,11 @@ public class SimpleTrackingCompass implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        PayloadTypeRegistry.playC2S().register(PlayerPositionRequest.ID, PlayerPositionRequest.CODEC);
-        PayloadTypeRegistry.playS2C().register(PlayerPositionResponse.ID, PlayerPositionResponse.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(PlayerPositionRequest.ID, PlayerPositionRequest.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(PlayerPositionResponse.ID, PlayerPositionResponse.CODEC);
 
-        PayloadTypeRegistry.playC2S().register(Ping.ID, Ping.CODEC);
-        PayloadTypeRegistry.playS2C().register(Pong.ID, Pong.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(Ping.ID, Ping.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(Pong.ID, Pong.CODEC);
 
         ServerNetworking.init();
     }

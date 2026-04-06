@@ -8,23 +8,23 @@ import chorus.simpletrackingcompass.network.packet.Pong;
 import chorus.simpletrackingcompass.network.packet.PlayerPositionResponse;
 import chorus.simpletrackingcompass.screen.TargetSelectorScreen;
 import chorus.simpletrackingcompass.util.TrackedPlayer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.phys.Vec3;
 
 public class ClientNetworking {
     public static void init() {
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
-            dispatcher.register(ClientCommandManager.literal("selector")
-                .executes(context -> {
-                    MinecraftClient client = MinecraftClient.getInstance();
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) ->
+            dispatcher.register(ClientCommands.literal("selector")
+                .executes(_ -> {
+                    Minecraft client = Minecraft.getInstance();
 
-                    client.send(() ->
+                    client.schedule(() ->
                         client.setScreen(new TargetSelectorScreen(null))
                     );
 
@@ -33,24 +33,24 @@ public class ClientNetworking {
             )
         );
 
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+        ClientPlayConnectionEvents.JOIN.register((_, _, _) -> {
             ClientPlayNetworking.send(new Ping());
             CompassHUD.handleClientJoin();
         });
 
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) ->
+        ClientPlayConnectionEvents.DISCONNECT.register((_, _) ->
             CompassHUD.isServerModded = false
         );
 
-        ClientLifecycleEvents.CLIENT_STOPPING.register(client ->
+        ClientLifecycleEvents.CLIENT_STOPPING.register(_ ->
             ConfigManager.save(new ConfigManager.Options(
                 ConfigManager.SHOULD_SEND_GUIDE_MESSAGE,
                 ConfigManager.UPDATE_INTERVAL
             ))
         );
 
-        ClientPlayNetworking.registerGlobalReceiver(PlayerPositionResponse.ID, (payload, context) -> {
-            Vec3d pos = payload.pos();
+        ClientPlayNetworking.registerGlobalReceiver(PlayerPositionResponse.ID, (payload, _) -> {
+            Vec3 pos = payload.pos();
             Identifier dimension = payload.dimensionId();
 
             TrackedPlayer tracked = CompassHUD.getTrackedPlayer();
@@ -59,7 +59,7 @@ public class ClientNetworking {
             }
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(Pong.ID, (payload, context) ->
+        ClientPlayNetworking.registerGlobalReceiver(Pong.ID, (_, _) ->
             CompassHUD.isServerModded = true
         );
     }

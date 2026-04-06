@@ -1,15 +1,14 @@
 package chorus.simpletrackingcompass.util;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-
 import javax.imageio.ImageIO;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Optional;
@@ -17,12 +16,12 @@ import java.util.Optional;
 public class Utils {
 
     public static int[] getTextureSize(Identifier id) {
-        ResourceManager RM = MinecraftClient.getInstance().getResourceManager();
+        ResourceManager RM = Minecraft.getInstance().getResourceManager();
 
         try {
             Optional<Resource> resource = RM.getResource(id);
             if (resource.isPresent()) {
-                BufferedImage img = ImageIO.read(resource.get().getInputStream());
+                BufferedImage img = ImageIO.read(resource.get().open());
                 return new int[]{img.getWidth(), img.getHeight()};
             }
         } catch (IOException ignored) {
@@ -40,9 +39,9 @@ public class Utils {
         return new int[]{newWidth, newHeight};
     }
 
-    public static int[] getButtonBounds(Screen screen, Text text) {
-        for (Element element : screen.children()) {
-            if (element instanceof ButtonWidget button) {
+    public static int[] getButtonBounds(Screen screen, Component text) {
+        for (GuiEventListener element : screen.children()) {
+            if (element instanceof Button button) {
                 if (button.getMessage().getString().equals(text.getString())) {
                     return new int[]{
                         button.getX(), button.getY(),

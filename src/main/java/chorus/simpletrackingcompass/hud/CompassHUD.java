@@ -7,14 +7,13 @@ import chorus.simpletrackingcompass.util.PlayerUtils;
 import chorus.simpletrackingcompass.util.TrackedPlayer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
 import java.util.UUID;
 
 import static chorus.simpletrackingcompass.SimpleTrackingCompass.MOD_ID;
@@ -23,9 +22,9 @@ public class CompassHUD {
 
     // Client references
 
-    private static MinecraftClient client = MinecraftClient.getInstance();
-    private static ClientWorld clientWorld = client.world;
-    private static PlayerEntity localPlayer = client.player;
+    private static Minecraft client = Minecraft.getInstance();
+    private static ClientLevel clientWorld = client.level;
+    private static Player localPlayer = client.player;
 
     // The player currently being tracked
 
@@ -33,7 +32,7 @@ public class CompassHUD {
 
     // Compass HUD rendering state and constants
 
-    private static final Identifier HUD_COMPASS_ID = Identifier.of("compass_hud");
+    private static final Identifier HUD_COMPASS_ID = Identifier.parse("compass_hud");
 
     private static final double halfFrameAngle = 360.0 / (32 * 2);
 
@@ -58,7 +57,7 @@ public class CompassHUD {
 
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(
-            client -> {
+            _ -> {
                 if (isHidden() || !PlayerUtils.inWorld()) return;
                 gameTicks++;
 
@@ -76,11 +75,11 @@ public class CompassHUD {
                     int trackedPlayerX = (int) trackedPlayer.getX();
                     int trackedPlayerZ = (int) trackedPlayer.getZ();
 
-                    if (localPlayer.getUuid().equals(trackedPlayer.getUuid()) ||
+                    if (localPlayer.getUUID().equals(trackedPlayer.getUuid()) ||
                         (playerX == trackedPlayerX && playerZ == trackedPlayerZ)) {
                         compassFrameIndex = 32;
                     } else {
-                        int playerYaw = ((int) localPlayer.getYaw() % 360 + 360) % 360;
+                        int playerYaw = ((int) localPlayer.getYRot() % 360 + 360) % 360;
 
                         int trackedPlayerYaw = Utils.calculateAngle(
                             playerX, playerZ,
@@ -101,12 +100,12 @@ public class CompassHUD {
         HudElementRegistry.addFirst(
             HUD_COMPASS_ID,
             // This method is called every tick to render the compass HUD
-            (context, tickCounter) -> {
+            (context, _) -> {
                 if (isHidden()) return;
 
-                if (client == null) client = MinecraftClient.getInstance();
+                if (client == null) client = Minecraft.getInstance();
 
-                Identifier compassTextureId = Identifier.of(
+                Identifier compassTextureId = Identifier.fromNamespaceAndPath(
                     MOD_ID,
                     "textures/gui/compass_" + compassFrameIndex + ".png"
                 );
@@ -121,7 +120,7 @@ public class CompassHUD {
                 int scaledWidth = size[0];
                 int scaledHeight = size[1];
 
-                context.drawTexture(
+                context.blit(
                     RenderPipelines.GUI_TEXTURED,
                     compassTextureId,
                     hudCompassX, hudCompassY,
@@ -132,16 +131,16 @@ public class CompassHUD {
 
                 // Draw the trackedPlayer's name above the Hotbar
 
-                InGameHudAccessor inGameHud = ((InGameHudAccessor) client.inGameHud);
+                InGameHudAccessor inGameHud = ((InGameHudAccessor) client.gui);
                 if (inGameHud.getOverlayMessage() != null &&
                     inGameHud.getOverlayRemaining() > 0) return;
 
-                TextRenderer tr = client.textRenderer;
+                Font tr = client.font;
 
-                int x = context.getScaledWindowWidth() / 2 - tr.getWidth(trackingLabel) / 2;
-                int y = context.getScaledWindowHeight() - 68 - tr.fontHeight / 2;
+                int x = context.guiWidth() / 2 - tr.width(trackingLabel) / 2;
+                int y = context.guiHeight() - 68 - tr.lineHeight / 2;
 
-                context.drawText(tr, trackingLabel, x, y, 0xFFFFFFFF, true);
+                context.text(tr, trackingLabel, x, y, 0xFFFFFFFF, true);
             }
         );
     }
@@ -149,8 +148,8 @@ public class CompassHUD {
     public static void setTrackedPlayer(UUID uuid, String name, boolean runtimeTriggered) {
         if (uuid == null || name == null) return;
 
-        PlayerListEntry entry = client.getNetworkHandler() != null ? client.getNetworkHandler().getPlayerListEntry(uuid) : null;
-        PlayerEntity playerEntity = PlayerUtils.getPlayerEntity(uuid);
+        PlayerInfo entry = client.getConnection() != null ? client.getConnection().getPlayerInfo(uuid) : null;
+        Player playerEntity = PlayerUtils.getPlayerEntity(uuid);
 
         if (entry != null) {
             if (playerEntity != null) {
@@ -187,7 +186,7 @@ public class CompassHUD {
     // Private helper methods
 
     private static boolean isHidden() {
-        return isCompassHUDHidden || MinecraftClient.getInstance().options.hudHidden;
+        return isCompassHUDHidden || Minecraft.getInstance().options.hideGui;
     }
 
     private static void syncTickCounter() {
@@ -196,11 +195,11 @@ public class CompassHUD {
     }
 
     private static void resetTrackedPlayer() {
-        trackedPlayer = MinecraftClient.getInstance().player != null ? new TrackedPlayer(MinecraftClient.getInstance().player) : null;
+        trackedPlayer = Minecraft.getInstance().player != null ? new TrackedPlayer(Minecraft.getInstance().player) : null;
     }
 
     private static void updateClientReferences() {
-        clientWorld = client.world;
+        clientWorld = client.level;
         localPlayer = client.player;
     }
 
@@ -212,7 +211,7 @@ public class CompassHUD {
             setTrackedPlayer(trackedPlayer.getUuid(), trackedPlayer.getName(), true);
         }
 
-        if (trackedPlayer.getDimension() != null && !clientWorld.getRegistryKey().getValue().equals(trackedPlayer.getDimension())) {
+        if (trackedPlayer.getDimension() != null && !clientWorld.dimension().identifier().equals(trackedPlayer.getDimension())) {
             PlayerUtils.playerInAnotherDimensionWarn(trackedPlayer.getName(), trackedPlayer.getDimension());
             resetTrackedPlayer();
         }

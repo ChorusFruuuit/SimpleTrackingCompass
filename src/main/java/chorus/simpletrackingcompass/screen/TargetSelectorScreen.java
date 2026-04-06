@@ -6,20 +6,20 @@ import chorus.simpletrackingcompass.hud.CompassHUD;
 import chorus.simpletrackingcompass.screen.widget.RangeSliderWidget;
 import chorus.simpletrackingcompass.util.Utils;
 import chorus.simpletrackingcompass.screen.widget.ScrollableList;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.option.OptionsScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.CyclingButtonWidget;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.CycleButton;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.options.OptionsScreen;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import org.jspecify.annotations.NonNull;
 
 public class TargetSelectorScreen extends Screen {
     private final Screen parent;
@@ -30,7 +30,7 @@ public class TargetSelectorScreen extends Screen {
     // Constructor
 
     public TargetSelectorScreen(Screen parent) {
-        super(Text.literal("Select a target"));
+        super(Component.literal("Select a target"));
         this.parent = parent;
     }
 
@@ -38,14 +38,15 @@ public class TargetSelectorScreen extends Screen {
 
     @Override
     protected void init() {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
 
         // 'Done' button
 
         OptionsScreen optionsScreen = new OptionsScreen(
-            client.currentScreen,
-            client.options
+            this,
+            client.options,
+            true
         );
 
         optionsScreen.init(
@@ -53,33 +54,33 @@ public class TargetSelectorScreen extends Screen {
             this.height
         );
 
-        Text doneButtonLabel = ScreenTexts.DONE;
+        Component doneButtonLabel = CommonComponents.GUI_DONE;
 
         int[] doneBounds = Utils.getButtonBounds(optionsScreen, doneButtonLabel);
         if (doneBounds == null) doneBounds = new int[]{0, 0, 0, 0};
 
-        ButtonWidget doneButton = ButtonWidget
-            .builder(doneButtonLabel, btn -> close())
-            .dimensions(doneBounds[0], doneBounds[1], doneBounds[2], doneBounds[3])
+        Button doneButton = Button
+            .builder(doneButtonLabel, _ -> onClose())
+            .bounds(doneBounds[0], doneBounds[1], doneBounds[2], doneBounds[3])
             .build();
 
-        addDrawableChild(doneButton);
+        addRenderableWidget(doneButton);
 
         // 'Hide Compass HUD' button
 
         int toggleY = (doneBounds[1] - 50) + (50 / 2 - doneBounds[3] / 2);
 
-        CyclingButtonWidget<Boolean> toggleButton = CyclingButtonWidget
+        CycleButton<Boolean> toggleButton = CycleButton
             .onOffBuilder(CompassHUD.isCompassHUDHidden)
-            .build(
+            .create(
                 doneBounds[0], toggleY,
                 doneBounds[2], doneBounds[3],
-                Text.literal("Hide Compass HUD"),
-                (btn, value) ->
+                Component.literal("Hide Compass HUD"),
+                (_, value) ->
                     CompassHUD.isCompassHUDHidden = value
             );
 
-        addDrawableChild(toggleButton);
+        addRenderableWidget(toggleButton);
 
         // Slider for configuring how often is the compass needle updated
 
@@ -91,11 +92,11 @@ public class TargetSelectorScreen extends Screen {
         );
 
         compassUpdateSlider.setLabelAndTooltip(
-            Text.literal("Compass Update Delay"),
-            Text.literal("How often is the compass needle updated (in ticks).\nLower = faster updates.")
+            Component.literal("Compass Update Delay"),
+            Component.literal("How often is the compass needle updated (in ticks).\nLower = faster updates.")
         );
 
-        addDrawableChild(compassUpdateSlider);
+        addRenderableWidget(compassUpdateSlider);
 
         // Scrollable list of players
 
@@ -107,40 +108,40 @@ public class TargetSelectorScreen extends Screen {
         );
 
         // Add the client.player to the list
-        PlayerEntity player = client.player;
+        Player player = client.player;
         playerList.addEntry(player.getName().getString() + suffix);
 
         // Create the list of all players
-        Collection<PlayerListEntry> players =
-            client.getNetworkHandler() != null
-                ? client.getNetworkHandler().getPlayerList()
+        Collection<PlayerInfo> players =
+            client.getConnection() != null
+                ? client.getConnection().getOnlinePlayers()
                 : List.of();
 
         // Add players to the list
-        for (PlayerListEntry entry : players) {
+        for (PlayerInfo entry : players) {
             GameProfile profile = entry.getProfile();
             String name = profile.name();
 
             // Skip the client.player because it has already been added
-            if (profile.id().equals(player.getUuid()) || name.trim().isEmpty())
+            if (profile.id().equals(player.getUUID()) || name.trim().isEmpty())
                 continue;
 
             // Add the player to the list
             playerList.addEntry(name);
         }
 
-        addDrawableChild(playerList);
+        addRenderableWidget(playerList);
     }
 
     // Render method. Called every frame
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-        super.render(context, mouseX, mouseY, deltaTicks);
+    public void extractRenderState(@NonNull GuiGraphicsExtractor context, int mouseX, int mouseY, float deltaTicks) {
+        super.extractRenderState(context, mouseX, mouseY, deltaTicks);
 
-        if (MinecraftClient.getInstance().getWindow().isFullscreen()) {
-            context.drawCenteredTextWithShadow(
-                this.textRenderer,
+        if (Minecraft.getInstance().getWindow().isFullscreen()) {
+            context.centeredText(
+                this.font,
                 this.title,
                 this.width / 2,
                 20,
@@ -152,8 +153,8 @@ public class TargetSelectorScreen extends Screen {
     // Overriding close method
 
     @Override
-    public void close() {
-        MinecraftClient client = MinecraftClient.getInstance();
+    public void onClose() {
+        Minecraft client = Minecraft.getInstance();
 
         Integer index = playerList.getSelectedIndex();
         String selectedPlayerName = (index != null) ? playerList.getEntry(playerList.getElements().indexOf(playerList.getVisibleEntry(index))) : null;
@@ -162,9 +163,9 @@ public class TargetSelectorScreen extends Screen {
 
         if (selectedPlayerName != null && selectedPlayerName.endsWith(suffix)) {
             selectedPlayerName = selectedPlayerName.replace(suffix, "");
-            selectedPlayerUuid = (client.player != null) ? client.player.getUuid() : null;
-        } else if (selectedPlayerName != null && client.getNetworkHandler() != null) {
-            for (PlayerListEntry player : client.getNetworkHandler().getPlayerList()) {
+            selectedPlayerUuid = (client.player != null) ? client.player.getUUID() : null;
+        } else if (selectedPlayerName != null && client.getConnection() != null) {
+            for (PlayerInfo player : client.getConnection().getOnlinePlayers()) {
                 if (player.getProfile().name().equals(selectedPlayerName)) {
                     selectedPlayerUuid = player.getProfile().id();
                     break;

@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.13-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -21,24 +21,29 @@ repositories {
     // for more information about repositories.
 }
 
-def yarn_mappings = "${project.minecraft_version}+build.${project.yarn_build}"
+loom {
+    runs {
+        client {
+            programArgs "--username", (project.findProperty("username") ?: "Player").toString()
+        }
+    }
+}
 
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}+${project.minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}+${project.minecraft_version}"
 
     //Mod Menu
-    modImplementation "com.terraformersmc:modmenu:${mod_menu_version}"
+    implementation "com.terraformersmc:modmenu:${mod_menu_version}"
 }
 
 processResources {
     inputs.property "version", project.mod_version
     inputs.property "minecraft_version", project.minecraft_version
     inputs.property "loader_version", project.loader_version
-    inputs.property "fabric_version", project.fabric_version
+    inputs.property "fabric_api_version", project.fabric_api_version
     filteringCharset="UTF-8"
 
     filesMatching("fabric.mod.json") {
@@ -46,14 +51,14 @@ processResources {
                 "version": project.mod_version,
                 "minecraft_version": project.minecraft_version,
                 "loader_version": project.loader_version,
-                "fabric_version": project.fabric_version
+                "fabric_api_version": project.fabric_api_version
         )
     }
 }
 
-def targetJavaVersion = 21
+def targetJavaVersion = 25
 tasks.withType(JavaCompile).configureEach {
-    it.options.release.set(targetJavaVersion)
+    it.options.release = targetJavaVersion
     // ensure that the encoding is set to UTF-8, no matter what the system default is
     // this fixes some edge cases with special characters not displaying correctly
     // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
@@ -70,16 +75,10 @@ java {
 }
 
 jar {
-    from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}" }
-    }
-}
+    inputs.property "archivesName", project.base.archivesName
 
-loom {
-    runs {
-        client {
-            programArgs "--username", (project.findProperty("username") ?: "Player").toString()
-        }
+    from("LICENSE") {
+        rename { "${it}_${inputs.properties.archivesName}" }
     }
 }
 

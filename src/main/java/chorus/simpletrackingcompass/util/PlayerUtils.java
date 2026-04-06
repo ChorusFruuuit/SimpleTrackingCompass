@@ -1,92 +1,91 @@
 package chorus.simpletrackingcompass.util;
 
 import chorus.simpletrackingcompass.mixin.InGameHudAccessor;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-
 import java.util.UUID;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
 
 public class PlayerUtils {
     public static void playerNotFoundError(String playerName) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.player == null || client.player.getName().getString().equals(playerName)) return;
+        Minecraft client = Minecraft.getInstance();
+        if (client.player == null || client.player.getName().getString().equals(playerName)) return;
 
-        MutableText message =
-            Text.literal(
+        MutableComponent message =
+            Component.literal(
                     playerName
-                ).formatted(Formatting.YELLOW)
+                ).withStyle(ChatFormatting.YELLOW)
 
                 .append(
-                    Text.literal(
+                    Component.literal(
                         " cannot be found. Target Player was set back to:"
-                    ).formatted(Formatting.RED)
+                    ).withStyle(ChatFormatting.RED)
                 )
 
                 .append(
-                    Text.literal(
+                    Component.literal(
                         client.player.getName().getString()
-                    ).formatted(Formatting.YELLOW)
+                    ).withStyle(ChatFormatting.YELLOW)
                 );
 
         setOverlayMessage(message, false, 120);
     }
 
     public static void playerOutOfRenderDistanceWarn(String playerName) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.player == null || client.player.getName().getString().equals(playerName)) return;
+        Minecraft client = Minecraft.getInstance();
+        if (client.player == null || client.player.getName().getString().equals(playerName)) return;
 
-        MutableText message =
-            Text.literal(
+        MutableComponent message =
+            Component.literal(
                     playerName
-                ).formatted(Formatting.YELLOW)
+                ).withStyle(ChatFormatting.YELLOW)
 
                 .append(
-                    Text.literal(
+                    Component.literal(
                         " is not within your render distance."
-                    ).formatted(Formatting.GOLD)
+                    ).withStyle(ChatFormatting.GOLD)
                 );
 
         setOverlayMessage(message, false, 120);
     }
 
     public static void playerInAnotherDimensionWarn(String playerName, Identifier dim) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.player == null || client.player.getName().getString().equals(playerName) || dim == null)
+        Minecraft client = Minecraft.getInstance();
+        if (client.player == null || client.player.getName().getString().equals(playerName) || dim == null)
             return;
 
-        MutableText message =
-            Text.literal(
+        MutableComponent message =
+            Component.literal(
                     playerName
-                ).formatted(Formatting.YELLOW)
+                ).withStyle(ChatFormatting.YELLOW)
 
                 .append(
-                    Text.literal(
+                    Component.literal(
                         String.format(" is in another dimension (%s).", dim)
-                    ).formatted(Formatting.GOLD)
+                    ).withStyle(ChatFormatting.GOLD)
                 );
 
         setOverlayMessage(message, false, 120);
     }
 
     public static void guideMessage() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.player == null) return;
+        Minecraft client = Minecraft.getInstance();
+        if (client.player == null) return;
 
-        MutableText message =
-            Text.literal(
+        MutableComponent message =
+            Component.literal(
                     "To select a tracking target, click "
-                ).formatted(Formatting.BLUE)
+                ).withStyle(ChatFormatting.BLUE)
 
                 .append(
-                    Text.literal("Here")
-                        .styled(style -> style
+                    Component.literal("Here")
+                        .withStyle(style -> style
                             .withColor(0x55FFFF) // aqua
                             .withBold(true)
                             .withClickEvent(
@@ -96,31 +95,30 @@ public class PlayerUtils {
                             )
                             .withHoverEvent(
                                 new HoverEvent.ShowText(
-                                    Text.literal(
+                                    Component.literal(
                                         "Click to open Target Selector"
                                     )
                                 )
                             )
                         )
                 )
-                .append(Text.literal(" or open the selector manually via")
-                    .formatted(Formatting.BLUE))
-                .append(Text.literal("\nESC → Compass Button")
-                    .formatted(Formatting.YELLOW));
+                .append(Component.literal(" or open the selector manually via")
+                    .withStyle(ChatFormatting.BLUE))
+                .append(Component.literal("\nESC → Compass Button")
+                    .withStyle(ChatFormatting.YELLOW));
 
-        client.player.sendMessage(message, false);
+        client.player.sendSystemMessage(message);
     }
 
     /**
      * Returns null if the player is not on the server
      */
     public static Boolean isWithinRenderDistance(UUID uuid) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (uuid == null || client == null || client.world == null ||
-            client.getNetworkHandler() == null) return null;
+        Minecraft client = Minecraft.getInstance();
+        if (uuid == null || client.level == null || client.getConnection() == null) return null;
 
         boolean listedInTab = false;
-        for (PlayerListEntry p : client.getNetworkHandler().getPlayerList()) {
+        for (PlayerInfo p : client.getConnection().getOnlinePlayers()) {
             if (p.getProfile().id().equals(uuid)) {
                 listedInTab = true;
                 break;
@@ -128,8 +126,8 @@ public class PlayerUtils {
         }
 
         boolean withinRenderDistance = false;
-        for (PlayerEntity p : client.world.getPlayers()) {
-            if (p.getUuid().equals(uuid)) {
+        for (Player p : client.level.players()) {
+            if (p.getUUID().equals(uuid)) {
                 withinRenderDistance = true;
                 break;
             }
@@ -138,13 +136,13 @@ public class PlayerUtils {
         return listedInTab ? withinRenderDistance : null;
     }
 
-    public static PlayerEntity getPlayerEntity(UUID uuid) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.world == null) return null;
+    public static Player getPlayerEntity(UUID uuid) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.level == null) return null;
 
-        PlayerEntity player = null;
-        for (PlayerEntity p : client.world.getPlayers()) {
-            if (uuid.equals(p.getUuid())) {
+        Player player = null;
+        for (Player p : client.level.players()) {
+            if (uuid.equals(p.getUUID())) {
                 player = p;
                 break;
             }
@@ -154,15 +152,15 @@ public class PlayerUtils {
     }
 
     public static boolean inWorld() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        return client.world != null && client.player != null;
+        Minecraft client = Minecraft.getInstance();
+        return client.level != null && client.player != null;
     }
 
-    public static void setOverlayMessage(Text message, boolean tinted, int ticks) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        client.inGameHud.setOverlayMessage(message, tinted);
+    public static void setOverlayMessage(Component message, boolean tinted, int ticks) {
+        Minecraft client = Minecraft.getInstance();
+        client.gui.setOverlayMessage(message, tinted);
 
-        InGameHudAccessor inGameHud = (InGameHudAccessor) client.inGameHud;
+        InGameHudAccessor inGameHud = (InGameHudAccessor) client.gui;
         inGameHud.setOverlayRemaining(ticks);
     }
 }

@@ -1,22 +1,26 @@
 package chorus.simpletrackingcompass.screen.widget;
 
 import chorus.simpletrackingcompass.util.Utils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.Window;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScrollableList implements Drawable, Element, Selectable {
+public class ScrollableList implements Renderable, GuiEventListener, NarratableEntry {
     private final int x;
     private final int y;
     private final int width;
@@ -24,7 +28,7 @@ public class ScrollableList implements Drawable, Element, Selectable {
     private final int entryHeight;
     private final int offset = 4;
 
-    private final TextFieldWidget searchField;
+    private final EditBox searchField;
     private String filter = "";
 
     private final List<String> allElements = new ArrayList<>();
@@ -40,12 +44,13 @@ public class ScrollableList implements Drawable, Element, Selectable {
     // Implementation of abstract methods
 
     @Override
-    public SelectionType getType() {
-        return SelectionType.NONE;
+    @NonNull
+    public NarrationPriority narrationPriority() {
+        return NarrationPriority.NONE;
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) {
+    public void updateNarration(@NonNull NarrationElementOutput builder) {
     }
 
     // Constructor
@@ -59,14 +64,14 @@ public class ScrollableList implements Drawable, Element, Selectable {
         this.height = isInside ? height - searchFieldHeight : height;
         this.entryHeight = entryHeight + this.offset;
 
-        this.searchField = new TextFieldWidget(
+        this.searchField = new EditBox(
             getTextRenderer(),
             x, y - searchFieldHeight,
             width, searchFieldHeight,
-            Text.literal("Search...")
+            Component.literal("Search...")
         );
-        this.searchField.setPlaceholder(Text.literal("Search..."));
-        this.searchField.setChangedListener(changedListener -> {
+        this.searchField.setHint(Component.literal("Search..."));
+        this.searchField.setResponder(changedListener -> {
             selectedIndex = -1;
             refreshVisibleEntries(changedListener);
         });
@@ -109,8 +114,8 @@ public class ScrollableList implements Drawable, Element, Selectable {
     // Render method. Called every frame
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.searchField.render(context, mouseX, mouseY, delta);
+    public void extractRenderState(@NonNull GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        this.searchField.extractWidgetRenderState(context, mouseX, mouseY, delta);
 
         context.fill(x, y, x + width, y + height, 0xAA000000);
         context.enableScissor(x, y, x + width, y + height);
@@ -123,9 +128,9 @@ public class ScrollableList implements Drawable, Element, Selectable {
             int color = (startIndex + i == selectedIndex && isSelected())
                 ? 0xFF808080 : 0xFFFFFFFF;
 
-            context.drawTextWithShadow(
+            context.text(
                 getTextRenderer(),
-                Text.literal(text),
+                Component.literal(text),
                 offset + (x - scrollX),
                 offset + (y + i * entryHeight),
                 color
@@ -167,7 +172,7 @@ public class ScrollableList implements Drawable, Element, Selectable {
     }
 
     @Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         boolean clickedSearch = searchField.isMouseOver(click.x(), click.y());
         boolean clickedList = insideList(click.x(), click.y());
 
@@ -175,9 +180,9 @@ public class ScrollableList implements Drawable, Element, Selectable {
             searchField.setFocused(true);
             selectedIndex = -1;
         } else if (!clickedSearch && searchField.isFocused() &&
-            (!clickedList || searchField.getText().isEmpty())) {
+            (!clickedList || searchField.getValue().isEmpty())) {
             searchField.setFocused(false);
-            searchField.setText("");
+            searchField.setValue("");
         }
 
         if (clickedList) {
@@ -196,25 +201,25 @@ public class ScrollableList implements Drawable, Element, Selectable {
     }
 
     @Override
-    public boolean keyPressed(KeyInput input) {
+    public boolean keyPressed(@NonNull KeyEvent input) {
         return searchField.keyPressed(input);
     }
 
     @Override
-    public boolean charTyped(CharInput input) {
+    public boolean charTyped(@NonNull CharacterEvent input) {
         return searchField.charTyped(input);
     }
 
     // Private helper methods
 
-    private TextRenderer getTextRenderer() {
-        return MinecraftClient.getInstance().textRenderer;
+    private Font getTextRenderer() {
+        return Minecraft.getInstance().font;
     }
 
     private boolean isShiftDown() {
-        Window window = MinecraftClient.getInstance().getWindow();
-        return InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_SHIFT)
-            || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
+        Window window = Minecraft.getInstance().getWindow();
+        return InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT)
+            || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
     private void filterVisibleEntries(String filter) {
@@ -233,8 +238,8 @@ public class ScrollableList implements Drawable, Element, Selectable {
 
         String widest = "";
         for (String entry : visibleElements) {
-            if (getTextRenderer().getWidth(entry) >
-                getTextRenderer().getWidth(widest)) {
+            if (getTextRenderer().width(entry) >
+                getTextRenderer().width(widest)) {
                 widest = entry;
             }
         }
@@ -248,7 +253,7 @@ public class ScrollableList implements Drawable, Element, Selectable {
         int contentHeight = visibleElements.size() * entryHeight;
         maxScrollY = Math.max(0, contentHeight - height);
 
-        int elementWidth = getTextRenderer().getWidth(text) + 2 * offset;
+        int elementWidth = getTextRenderer().width(text) + 2 * offset;
         maxScrollX = Math.max(0, elementWidth - width);
     }
 
