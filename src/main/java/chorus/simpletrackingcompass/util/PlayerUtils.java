@@ -24,7 +24,7 @@ public class PlayerUtils {
 
                 .append(
                     Component.literal(
-                        " cannot be found. Target Player was set back to:"
+                        " cannot be found. Target Player was set back to: "
                     ).withStyle(ChatFormatting.RED)
                 )
 

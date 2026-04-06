@@ -63,37 +63,33 @@ public class CompassHUD {
 
                 // Calculate which compass texture to use
 
-                if (gameTicks - lastUpdateTick >= ConfigManager.UPDATE_INTERVAL) {
-                    lastUpdateTick = gameTicks;
+                updateClientReferences();
+                updateTrackedPlayer();
 
-                    updateClientReferences();
-                    updateTrackedPlayer();
+                int playerX = (int) localPlayer.getX();
+                int playerZ = (int) localPlayer.getZ();
 
-                    int playerX = (int) localPlayer.getX();
-                    int playerZ = (int) localPlayer.getZ();
+                int trackedPlayerX = (int) trackedPlayer.getX();
+                int trackedPlayerZ = (int) trackedPlayer.getZ();
 
-                    int trackedPlayerX = (int) trackedPlayer.getX();
-                    int trackedPlayerZ = (int) trackedPlayer.getZ();
+                if (localPlayer.getUUID().equals(trackedPlayer.getUuid()) ||
+                    (playerX == trackedPlayerX && playerZ == trackedPlayerZ)) {
+                    compassFrameIndex = 32;
+                } else {
+                    int playerYaw = ((int) localPlayer.getYRot() % 360 + 360) % 360;
 
-                    if (localPlayer.getUUID().equals(trackedPlayer.getUuid()) ||
-                        (playerX == trackedPlayerX && playerZ == trackedPlayerZ)) {
-                        compassFrameIndex = 32;
-                    } else {
-                        int playerYaw = ((int) localPlayer.getYRot() % 360 + 360) % 360;
+                    int trackedPlayerYaw = Utils.calculateAngle(
+                        playerX, playerZ,
+                        trackedPlayerX, trackedPlayerZ
+                    );
 
-                        int trackedPlayerYaw = Utils.calculateAngle(
-                            playerX, playerZ,
-                            trackedPlayerX, trackedPlayerZ
-                        );
+                    int angle = ((180 + (trackedPlayerYaw - playerYaw)) % 360 + 360) % 360;
 
-                        int angle = ((180 + (trackedPlayerYaw - playerYaw)) % 360 + 360) % 360;
-
-                        compassFrameIndex = (int) ((angle + halfFrameAngle) / (2 * halfFrameAngle));
-                        compassFrameIndex %= 32;
-                    }
-
-                    trackingLabel = "Currently tracking: " + trackedPlayer.getName();
+                    compassFrameIndex = (int) ((angle + halfFrameAngle) / (2 * halfFrameAngle));
+                    compassFrameIndex %= 32;
                 }
+
+                trackingLabel = "Currently tracking: " + trackedPlayer.getName();
             }
         );
 
@@ -216,6 +212,14 @@ public class CompassHUD {
             resetTrackedPlayer();
         }
 
-        trackedPlayer.update();
+        if (withinRenderDistance == null || withinRenderDistance) {
+            trackedPlayer.update();
+            return;
+        }
+
+        if (gameTicks - lastUpdateTick >= ConfigManager.UPDATE_INTERVAL) {
+            lastUpdateTick = gameTicks;
+            trackedPlayer.update();
+        }
     }
 }
