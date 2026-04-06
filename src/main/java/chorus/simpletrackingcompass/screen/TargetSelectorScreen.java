@@ -178,3 +178,5 @@ public class TargetSelectorScreen extends Screen {
         client.setScreen(this.parent);
     }
 }
+
+// TODO: Add a button to filter out the players who are not within the render distance
