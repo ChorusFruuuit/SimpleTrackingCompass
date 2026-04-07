@@ -15,7 +15,7 @@ public class ConfigManager {
 
     public record Options(boolean sendGuideMessage, int updateInterval) {
         public static Options getDefault() {
-            return new Options(true, 5);
+            return new Options(true, 10);
         }
     }
 

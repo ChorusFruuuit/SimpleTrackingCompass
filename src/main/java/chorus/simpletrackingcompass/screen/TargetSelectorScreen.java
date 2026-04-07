@@ -82,7 +82,7 @@ public class TargetSelectorScreen extends Screen {
 
         addRenderableWidget(toggleButton);
 
-        // Slider for configuring how often is the compass needle updated
+        // Slider for configuring how often is the target player position updated
 
         RangeSliderWidget compassUpdateSlider = new RangeSliderWidget(
             doneBounds[0], doneBounds[1] - 200,
@@ -93,7 +93,7 @@ public class TargetSelectorScreen extends Screen {
 
         compassUpdateSlider.setLabelAndTooltip(
             Component.literal("Compass Update Delay"),
-            Component.literal("How often is the compass needle updated (in ticks).\nLower = faster updates.")
+            Component.literal("How often is the target player position updated (in ticks) when the target player is not within your render distance. Lower values - faster updates. Recommended: 10. This does not affect compass needle update frequency.")
         );
 
         addRenderableWidget(compassUpdateSlider);
