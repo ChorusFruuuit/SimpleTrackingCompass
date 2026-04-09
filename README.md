@@ -13,31 +13,31 @@
 
 # Simple Tracking Compass
 
-**Simple Tracking Compass** is a Fabric mod that adds a compass HUD to the top-left corner of your screen.  
-It lets you track other players, which can be especially useful for **manhunts** or other competitive challenges.
+**Simple Tracking Compass** is a Fabric mod that adds a **Compass** to the top-left corner of your screen.  
+It lets you track other players, which can be especially useful in manhunts.
 
 ---
 
-## ✨ Features
-- 📍 Shows a compass in the HUD. (Can be hidden)
-- 🧭 Lets you track other players.
-- 👥 Great for multiplayer survival, challenges, and manhunts.
+## Features
+- Shows a **Compass** in the HUD. (Can be hidden)
+- Lets you track other players with it.
+- Adds a **Selection Screen** located in the **Pause Menu**.
+  Also accessable with **/selector** command.
 
 ---
 
-## 🔧 Extra Features (Server/LAN Required)
-If the mod is **installed on the server** (or if you are playing on a **LAN world hosted by someone with the mod**), you unlock additional features:
-- 🔭 Ability to track players **even if they are outside your render distance**.
+## Extra Features
+If the mod is **installed on the server** (or if you are playing on a **LAN world hosted by someone with the mod**), you have the ability to track players **even if they are outside your render distance**.
 
-⚠️ These additional features are **not possible on unmodded servers** because Minecraft itself does not allow sending player position data unless the mod is present on the server.
+⚠️ This is **impossible on unmodded servers** because Minecraft itself does not allow sending player position data **using packets** unless the mod is present on the server.
 
 ---
 
-## 🔗 Socials
+## Socials
 
 - [Discord](https://discord.com/users/1003646124273455158)
 
 ---
 
-## 📜 License
+## License
 This project is licensed under the **MIT License**.
