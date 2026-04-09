@@ -7,7 +7,7 @@
 - [Fabric Loader](https://fabricmc.net/)
 - [Fabric API](https://modrinth.com/mod/fabric-api) (required)
 - [Mod Menu](https://modrinth.com/mod/modmenu) (optional)
-- (Optional) Install the mod on the server/LAN host to enable extra features.
+- (Optional) Install the mod on the server to enable remote tracking (more info below).
 
 ---
 
@@ -22,7 +22,7 @@ It lets you track other players, which can be especially useful in manhunts.
 - Shows a **Compass** in the HUD. (Can be hidden)
 - Lets you track other players with it.
 - Adds a **Selection Screen** located in the **Pause Menu**.
-  Also accessable with **/selector** command.
+  Also, accessible with **/selector** command.
 
 ---
 
