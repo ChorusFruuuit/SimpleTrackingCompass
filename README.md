@@ -3,33 +3,35 @@
 
 ---
 
-## Requirements
+## Fabric Requirements
 - [Fabric Loader](https://fabricmc.net/)
-- [Fabric API](https://modrinth.com/mod/fabric-api) (required)
+- [Fabric API](https://modrinth.com/mod/fabric-api)
 - [Mod Menu](https://modrinth.com/mod/modmenu) (optional)
-- (Optional) Install the mod on the server to enable remote tracking (more info below).
+
+## NeoForge Requirements
+- [NeoForge Loader](https://neoforged.net/)
+
+## Optional Requirement
+- Install the mod on the server to enable remote tracking (more info in **Extra Features**).
 
 ---
 
 # Simple Tracking Compass
 
-**Simple Tracking Compass** is a Fabric mod that adds a **Compass** to the top-left corner of your screen.  
-It lets you track other players, which can be especially useful in manhunts.
+**Simple Tracking Compass** is a Minecraft mod that adds a **Compass** to the top-left corner of your screen which lets you track other players.
 
 ---
 
 ## Features
 - Shows a **Compass** in the HUD. (Can be hidden)
-- Lets you track other players with it.
-- Adds a **Selection Screen** located in the **Pause Menu**.
+- Lets you track other players with it (as long as they are within your render distance, more info in **Extra Features**).
+- Adds a **Target Selector Screen** located in the **Pause Menu**.
   Also, accessible with **/selector** command.
 
 ---
 
-## Extra Features
-If the mod is **installed on the server** (or if you are playing on a **LAN world hosted by someone with the mod**), you have the ability to track players **even if they are outside your render distance**.
-
-⚠️ This is **impossible on unmodded servers** because Minecraft itself does not allow sending player position data **using packets** unless the mod is present on the server.
+## Extra Feature
+When the mod is present on the server, the range of trackable players extends to all the players listed in the tab, as long as they belong to the same dimension as you.
 
 ---
 
