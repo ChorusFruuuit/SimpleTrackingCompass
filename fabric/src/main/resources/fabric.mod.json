@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "simpletrackingcompass",
+  "version": "${mod_version}",
+  "name": "Simple Tracking Compass",
+  "description": "${description}",
+  "authors": [
+    "Chorus_Fruuu1t"
+  ],
+  "contact": {
+    "homepage": "https://github.com/ChorusFruuuit/SimpleTrackingCompass",
+    "sources": "https://github.com/ChorusFruuuit/SimpleTrackingCompass",
+    "issues": "https://github.com/ChorusFruuuit/SimpleTrackingCompass/issues"
+  },
+  "license": "MIT",
+  "icon": "icon.png",
+  "environment": "*",
+  "custom": {
+    "modmenu:api": true
+  },
+  "entrypoints": {
+    "client": [
+      "net.chorus.simpletrackingcompass.SimpleTrackingCompassFabric"
+    ],
+    "main": [
+      "net.chorus.simpletrackingcompass.SimpleTrackingCompassFabric"
+    ],
+    "modmenu": [
+      "net.chorus.simpletrackingcompass.compat.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "simpletrackingcompass.mixins.json"
+  ],
+  "depends": {
+    "minecraft": ">=${minecraft_version}",
+    "fabricloader": ">=${fabric_version}",
+    "fabric-api": ">=${fabric_api_version}",
+    "java": ">=${java_version}"
+  },
+  "recommends": {
+    "modmenu": ">=${mod_menu_version}"
+  }
+}
