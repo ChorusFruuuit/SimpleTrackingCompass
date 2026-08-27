@@ -1,0 +1,21 @@
+plugins {
+    // Only applied to be able to use minecraft code (neither fabric nor fabric api are being implemented)
+    id 'net.fabricmc.fabric-loom'
+}
+
+println("> Executing inside the :common project.")
+
+repositories {
+    maven {
+        name = "Mixin"
+        url = 'https://repo.spongepowered.org/repository/maven-public/'
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    compileOnly "net.fabricmc:fabric-loader:${project.fabric_version}"
+
+    compileOnly 'org.spongepowered:mixin:0.8.7'
+    annotationProcessor 'org.spongepowered:mixin:0.8.7:processor'
+}
