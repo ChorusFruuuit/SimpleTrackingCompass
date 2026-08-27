@@ -1,0 +1,99 @@
+plugins {
+    id 'net.fabricmc.fabric-loom-remap'
+}
+
+println("> Executing inside the :fabric project.")
+
+def parsed_java_version = Integer.parseInt(project.java_version)
+def mod_properties = providers.provider {
+    return [
+            "java_version"      : parsed_java_version,
+            "minecraft_version" : project.property("minecraft_version"),
+            "mod_version"       : project.property("mod_version"),
+            "description"       : project.property("description"),
+            "fabric_version"    : project.property("fabric_version"),
+            "fabric_api_version": project.property("fabric_api_version"),
+            "mod_menu_version"  : project.property("mod_menu_version")
+    ]
+}
+
+base {
+    // The base filename of the .jar
+    archivesName = "${project.archives_base_name}-fabric"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += project(":common").sourceSets.main.java.srcDirs
+        }
+
+        resources {
+            srcDirs += project(":common").sourceSets.main.resources.srcDirs
+        }
+    }
+}
+
+loom {
+    runs {
+        client {
+            client()
+            runDir("../run/fabric/client")
+
+            // Lets you set the user's name
+            programArgs("--username", (project.findProperty("username") ?: "Player").toString())
+        }
+        server {
+            server()
+            runDir("../run/fabric/server")
+            programArg("--nogui")
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = 'ModMenu'
+        url = "https://maven.terraformersmc.com/releases/"
+    }
+}
+
+dependencies {
+    implementation project(":common")
+
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}+${project.minecraft_version}"
+    modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
+}
+
+tasks.named('processResources', ProcessResources) {
+    filteringCharset = charset
+
+    inputs.properties(mod_properties.get())
+
+    // Expands gradle.properties into fabric.mod.json
+    filesMatching("fabric.mod.json") {
+        expand(mod_properties.get())
+    }
+}
+
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // Adds the LICENSE file to the .jar
+    from("../LICENSE") {
+        into("META-INF")
+    }
+
+    from(project(":common").sourceSets.main.output)
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
