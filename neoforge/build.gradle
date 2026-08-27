@@ -1,0 +1,93 @@
+plugins {
+    id 'net.neoforged.moddev'
+}
+
+println("> Executing inside the :neoforge project.")
+
+def parsed_java_version = Integer.parseInt(project.java_version)
+def mod_properties = providers.provider {
+    return [
+            "java_version"      : parsed_java_version,
+            "minecraft_version" : project.property("minecraft_version"),
+            "mod_version"       : project.property("mod_version"),
+            "description"       : project.property("description"),
+            "neo_version"       : project.property("neo_version")
+    ]
+}
+
+base {
+    // The base filename of the .jar
+    archivesName = "${project.archives_base_name}-neoforge"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += project(":common").sourceSets.main.java.srcDirs
+        }
+
+        resources {
+            srcDirs += project(":common").sourceSets.main.resources.srcDirs
+        }
+    }
+}
+
+neoForge {
+    var project = project
+    version = project.neo_version
+
+    runs {
+        client {
+            client()
+            gameDirectory = file("../run/neoforge/client")
+
+            // Lets you set the player's name
+            programArgument("--username")
+            programArgument((project.findProperty("username") ?: "Player").toString())
+        }
+        server {
+            server()
+            gameDirectory = file("../run/neoforge/server")
+            programArgument("--nogui")
+        }
+    }
+
+    mods {
+        "${project.mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+dependencies {
+    implementation project(":common")
+}
+
+tasks.named('processResources', ProcessResources) {
+    filteringCharset = charset
+
+    inputs.properties(mod_properties.get())
+
+    // Expands gradle.properties into neoforge.mods.toml
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand(mod_properties.get())
+    }
+}
+
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // Adds the LICENSE file to the .jar
+    from("../LICENSE") {
+        into("META-INF")
+    }
+
+    from(project(":common").sourceSets.main.output)
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
