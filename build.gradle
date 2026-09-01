@@ -1,99 +1,45 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.16-SNAPSHOT'
-    id 'maven-publish'
+    id 'java-library'
+
+    id 'idea'
+
+    // see https://fabricmc.net/develop for new versions
+    id 'net.fabricmc.fabric-loom-remap' version '1.16-SNAPSHOT' apply false
+
+    // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
+    id 'net.neoforged.moddev' version '2.0.144' apply false
 }
 
-version = "${project.mod_version}+${project.minecraft_version}"
-group = project.maven_group
+println("> Executing inside the root project.")
 
-base {
-    archivesName = project.archives_base_name
+def parsed_java_version = Integer.parseInt(project.java_version)
+
+allprojects {
+    // The version tag. Should follow the Semantic Versioning (SemVer) system
+    // with the Minecraft version suffix (e.g. major.minor.patch+minecraft_version)
+    version = "${project.mod_version}+${project.minecraft_version}"
+
+    // The publisher id. Must follow the standard Java package reverse-domain naming convention (e.g. com.example)
+    group = project.maven_group
 }
 
-repositories {
-    // Mod Menu
-    maven { url = "https://maven.terraformersmc.com/releases/" }
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'idea'
 
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
-}
+    java {
+        // Generates source code file which ends with -sources.jar
+        withSourcesJar()
 
-loom {
-    runs {
-        client {
-            programArgs "--username", (project.findProperty("username") ?: "Player").toString()
-        }
-    }
-}
-
-dependencies {
-    // To change the versions see the gradle.properties file
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}+${project.minecraft_version}"
-
-    //Mod Menu
-    implementation "com.terraformersmc:modmenu:${mod_menu_version}"
-}
-
-processResources {
-    inputs.property "version", project.mod_version
-    inputs.property "minecraft_version", project.minecraft_version
-    inputs.property "loader_version", project.loader_version
-    inputs.property "fabric_api_version", project.fabric_api_version
-    filteringCharset="UTF-8"
-
-    filesMatching("fabric.mod.json") {
-        expand(
-                "version": project.mod_version,
-                "minecraft_version": project.minecraft_version,
-                "loader_version": project.loader_version,
-                "fabric_api_version": project.fabric_api_version
-        )
-    }
-}
-
-def targetJavaVersion = 25
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = targetJavaVersion
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    // If Javadoc is generated, this must be specified in that task too.
-    it.options.encoding = "UTF-8"
-}
-
-java {
-    toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
-    withSourcesJar()
-}
-
-jar {
-    from("LICENSE") {
-        rename { "${it}_${project.base.archivesName.get()}" }
-    }
-}
-
-// configure the maven publication
-publishing {
-    publications {
-        create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
-            from components.java
-        }
+        // Sets the Java version
+        toolchain.languageVersion = JavaLanguageVersion.of(parsed_java_version)
     }
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
+    tasks.withType(JavaCompile).configureEach {
+        // Ensures that the Java version is set correctly
+        it.options.release = parsed_java_version
+
+        // Ensures that the encoding is set to UTF-8
+        it.options.encoding = charset
     }
 }
